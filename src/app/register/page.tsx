@@ -1,11 +1,13 @@
-import RegistrationSection from "@/sections/RegistrationSection";
+import RegistrationForm from "@/forms/RegistrationForm";
+import AuthSection from "@/sections/AuthSection";
 import React from "react";
 
 export default function RegisterPage() {
   return (
     <div>
-      RegisterPage
-      <RegistrationSection />
+      <AuthSection>
+        <RegistrationForm />
+      </AuthSection>
     </div>
   );
 }

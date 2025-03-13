@@ -10,12 +10,67 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-gilroy);
+  --color-grey-dark: #1f1f1f;
+  --color-grey: #262626;
+  --color-grey-form: #686868;
+  --color-grey-light: #e3e3e380;
+  --color-milk-white: #f9f9f9;
+  --color-red: #e90516;
+  --color-green: #30b94d;
+  --text-xxl: 32px;
+  --text-xxl--font-weight: bold;
+  --text-xxl--line-height: 32px;
+  --text-large: 14px;
+  --text-large--font-weight: bold;
+  --text-large--line-height: 18px;
+  --text-large-letter-spacing: 2%;
+  --text-small: 12px;
+  --text-small--font-weight: medium;
+  --text-small--line-height: 16px;
+  --text-light: 10px;
+  --text-light--font-weight: medium;
+  --text-light--line-height: 12px;
 }
 
 @font-face {
   font-family: "Gilroy";
-  src: url("/public/fonts/Gilroy-Regular.ttf") format("truetype"); /* Adjust the path and file name */
+  src: url("/fonts/Gilroy-Light.ttf") format("truetype");
+  font-weight: bold;
+  font-style: light;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Regular.ttf") format("truetype");
   font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Medium.ttf") format("truetype");
+  font-weight: medium;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-SemiBold.ttf") format("truetype");
+  font-weight: semibold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Black.ttf") format("truetype");
+  font-weight: black;
   font-style: normal;
 }
 
@@ -30,4 +85,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-gilroy);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #262626 inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 5000s ease-in-out 0s;
 }

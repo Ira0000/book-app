@@ -1,6 +1,8 @@
+"use client";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from "@/lib/cn";
-import { ComponentProps } from "react";
+import React, { ComponentProps, useState } from "react";
 import { Control, useController } from "react-hook-form";
 import Icon from "./Icon";
 
@@ -23,46 +25,78 @@ export default function FormInput({
   ...inputProps
 }: FormInputProps) {
   const {
+    fieldState: { isDirty },
     formState: { errors },
+    field,
   } = useController({ control, name });
 
+  const [isFocused, setIsFocused] = useState(false);
+
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
   return (
-    <div className="flex flex-col">
-      {label && (
-        <label className="mb-4 text-xs font-bold uppercase">{label}</label>
-      )}
-      <div className="relative">
+    <div className="flex flex-col relative">
+      <div
+        ref={containerRef}
+        tabIndex={-1}
+        onFocus={() => {
+          setIsFocused(true);
+        }}
+        onBlur={(e) => {
+          if (!containerRef.current?.contains(e.relatedTarget as Node)) {
+            setIsFocused(false);
+          }
+        }}
+        className={cn(
+          `items-center relative h-11 w-full rounded-[12px] bg-grey 
+            text-small pl-[14px] flex gap-[10px] transition-colors hover:border hover:border-milk-white/10 ${className}`,
+          {
+            "border border-green": !errors?.[name] && !isFocused && isDirty,
+            "border border-red": errors?.[name] && !isFocused && isDirty,
+          }
+        )}
+      >
+        {label && (
+          <label className="  text-small text-grey-form ">{label}</label>
+        )}
         <input
+          className="outline-none w-full "
           autoComplete="on"
-          {...control.register(name)}
+          {...field}
           {...inputProps}
-          className={cn(
-            `h-[48px] w-full rounded-[4px] border border-grey-200 bg-white px-[14px] py-4
-            text-sm outline-none transition-colors focus-visible:border-black ${className}`,
-            {
-              "border-error": errors?.[name],
-            }
-          )}
         />
-        {isPasswordField && toggleShowPassword && (
+        {isPasswordField && toggleShowPassword && isFocused && (
           <button
             type="button"
-            onClick={toggleShowPassword}
-            className="absolute right-[12px] top-[14px]"
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleShowPassword();
+            }}
+            className="absolute right-[16px] top-[13px] cursor-pointer z-10"
           >
             <Icon
               id={isPasswordShown ? "icon-eye" : "icon-eye-off"}
-              w={20}
-              h={20}
-              className="text-[#4E453E]"
+              w={18}
+              h={18}
+              className="stroke-white fill-none"
             />
           </button>
         )}
+        {!errors?.[name] && !isFocused && isDirty && (
+          <div className="absolute right-[16px] top-[13px]">
+            <Icon className="fill-green" id="icon-check" w={18} h={18} />
+          </div>
+        )}
       </div>
-      {errors[name] && (
-        <p className="mt-1 text-sm text-error">
-          {errors[name].message?.toString()}
-        </p>
+      {errors[name] && !isFocused && isDirty && (
+        <>
+          <div className="absolute right-[16px] top-[13px]">
+            <Icon className="fill-red" id="icon-error" w={18} h={18} />
+          </div>
+          <p className="mt-2 text-light text-red ml-[14px] ">
+            {errors[name].message?.toString()}
+          </p>
+        </>
       )}
     </div>
   );
