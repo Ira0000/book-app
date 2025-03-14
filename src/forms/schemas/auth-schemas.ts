@@ -27,7 +27,7 @@ export const registrationSchema = yup.object().shape({
 });
 
 export const loginSchema = yup.object().shape({
-  email: yup
+  mail: yup
     .string()
     .required("Email is required")
     .matches(

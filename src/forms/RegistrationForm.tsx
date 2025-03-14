@@ -12,7 +12,7 @@ export default function RegistrationForm() {
     resolver: yupResolver(registrationSchema),
     defaultValues: {
       name: "",
-      email: "",
+      mail: "",
       password: "",
     },
     mode: "onChange",

@@ -11,7 +11,7 @@ export default function LoginForm() {
   const { control, handleSubmit } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      email: "",
+      mail: "",
       password: "",
     },
     mode: "onChange",

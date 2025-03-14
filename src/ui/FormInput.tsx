@@ -13,7 +13,7 @@ type FormInputProps = ComponentProps<"input"> & {
   isPasswordField?: boolean;
   isPasswordShown?: boolean;
   validationVisible?: boolean;
-  validating: boolean;
+  validating?: boolean;
   toggleShowPassword?: () => void;
 };
 export default function FormInput({
@@ -28,7 +28,7 @@ export default function FormInput({
   ...inputProps
 }: FormInputProps) {
   const {
-    fieldState: { isTouched },
+    // fieldState: { isTouched },
     formState: { errors, isSubmitted },
     field,
   } = useController({ control, name });
