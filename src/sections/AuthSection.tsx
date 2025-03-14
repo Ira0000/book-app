@@ -4,7 +4,7 @@ import React, { PropsWithChildren } from "react";
 
 export default function AuthSection({ children }: PropsWithChildren) {
   return (
-    <section className="flex flex-col gap-[10px] p-5">
+    <section className="flex flex-col gap-[10px]">
       <div className="bg-grey-dark rounded-[30px] w-full p-5">
         <div className="mb-10">
           <Icon id="icon-icon" w={42} h={17} className="fill-white" />

@@ -4,10 +4,10 @@ import React from "react";
 
 export default function RegisterPage() {
   return (
-    <div>
+    <>
       <AuthSection>
         <RegistrationForm />
       </AuthSection>
-    </div>
+    </>
   );
 }

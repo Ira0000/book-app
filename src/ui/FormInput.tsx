@@ -12,6 +12,8 @@ type FormInputProps = ComponentProps<"input"> & {
   name: string;
   isPasswordField?: boolean;
   isPasswordShown?: boolean;
+  validationVisible?: boolean;
+  validating: boolean;
   toggleShowPassword?: () => void;
 };
 export default function FormInput({
@@ -21,18 +23,21 @@ export default function FormInput({
   className,
   isPasswordField = false,
   isPasswordShown,
+  validationVisible = false,
   toggleShowPassword,
   ...inputProps
 }: FormInputProps) {
   const {
-    fieldState: { isDirty },
-    formState: { errors },
+    fieldState: { isTouched },
+    formState: { errors, isSubmitted },
     field,
   } = useController({ control, name });
 
   const [isFocused, setIsFocused] = useState(false);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const hasValidationBorder = validationVisible && !isFocused && isSubmitted;
+  //   const hasValidationBorder = validationVisible && !isFocused && isTouched;
 
   return (
     <div className="flex flex-col relative">
@@ -48,47 +53,54 @@ export default function FormInput({
           }
         }}
         className={cn(
-          `items-center relative h-11 w-full rounded-[12px] bg-grey 
-            text-small pl-[14px] flex gap-[10px] transition-colors hover:border hover:border-milk-white/10 ${className}`,
+          `group items-center relative h-11 w-full rounded-[12px] bg-grey 
+            text-small pl-[14px] flex gap-[10px] transition-colors  ${className}`,
           {
-            "border border-green": !errors?.[name] && !isFocused && isDirty,
-            "border border-red": errors?.[name] && !isFocused && isDirty,
+            "border border-green hover:border-grey-form":
+              hasValidationBorder && !errors?.[name],
+            "border border-red hover:border-grey-form":
+              hasValidationBorder && errors?.[name],
+            "border border-transparent hover:border-grey-form":
+              !hasValidationBorder,
           }
         )}
       >
         {label && (
-          <label className="  text-small text-grey-form ">{label}</label>
+          <label
+            htmlFor={name}
+            className="capitalize  text-small text-grey-form "
+          >
+            {label}:
+          </label>
         )}
         <input
-          className="outline-none w-full "
+          id={name}
+          className="outline-none w-full h-full overflow-hidden "
           autoComplete="on"
           {...field}
           {...inputProps}
         />
-        {isPasswordField && toggleShowPassword && isFocused && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleShowPassword();
-            }}
-            className="absolute right-[16px] top-[13px] cursor-pointer z-10"
-          >
-            <Icon
-              id={isPasswordShown ? "icon-eye" : "icon-eye-off"}
-              w={18}
-              h={18}
-              className="stroke-white fill-none"
-            />
-          </button>
-        )}
-        {!errors?.[name] && !isFocused && isDirty && (
-          <div className="absolute right-[16px] top-[13px]">
-            <Icon className="fill-green" id="icon-check" w={18} h={18} />
-          </div>
-        )}
+        {isPasswordField &&
+          toggleShowPassword &&
+          (isFocused || !isSubmitted) && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleShowPassword();
+              }}
+              className="absolute right-[16px] top-[13px] cursor-pointer z-10"
+            >
+              <Icon
+                id={isPasswordShown ? "icon-eye" : "icon-eye-off"}
+                w={18}
+                h={18}
+                className="stroke-white fill-none"
+              />
+            </button>
+          )}
       </div>
-      {errors[name] && !isFocused && isDirty && (
+      {hasValidationBorder && errors[name] ? (
         <>
           <div className="absolute right-[16px] top-[13px]">
             <Icon className="fill-red" id="icon-error" w={18} h={18} />
@@ -97,6 +109,20 @@ export default function FormInput({
             {errors[name].message?.toString()}
           </p>
         </>
+      ) : (
+        hasValidationBorder &&
+        !errors[name] && (
+          <>
+            <div className="absolute right-[16px] top-[13px]">
+              <Icon className="fill-green" id="icon-check" w={18} h={18} />
+            </div>
+            {isPasswordField && (
+              <p className="mt-2 text-light text-green ml-[14px] ">
+                Password is secure
+              </p>
+            )}
+          </>
+        )
       )}
     </div>
   );
