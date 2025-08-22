@@ -13,7 +13,6 @@ type FormInputProps = ComponentProps<"input"> & {
   isPasswordField?: boolean;
   isPasswordShown?: boolean;
   validationVisible?: boolean;
-  validating?: boolean;
   toggleShowPassword?: () => void;
 };
 export default function FormInput({

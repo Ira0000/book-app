@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AuthProvider } from "@/components/AuthProvider";
+import { ModalProvider } from "@/components/ModalProvider";
+import ModalManager from "@/modals/ModalsManager";
 
 export const metadata: Metadata = {
   title: "Book App",
@@ -10,10 +13,18 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className="p-5">{children}</body>
+      <body className="p-5">
+        <AuthProvider>
+          <ModalProvider>
+            {children}
+            <ModalManager />
+          </ModalProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }

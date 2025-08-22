@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -6,21 +7,30 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "@/ui/FormInput";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const { control, handleSubmit } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      mail: "",
+      email: "",
       password: "",
     },
     mode: "onChange",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [validating, setValidating] = useState(false);
-  const onSubmit = (data: LoginFormData) => {
-    console.log(data);
-    setValidating(true);
+  const { signIn } = useAuth();
+  const router = useRouter();
+
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      await signIn(data);
+      console.log("Login successful!");
+      router.push("/");
+    } catch (err: any) {
+      console.error("Login failed:", err.message);
+    }
   };
 
   return (
@@ -30,9 +40,8 @@ export default function LoginForm() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-2">
-        <FormInput control={control} name="mail" label="mail" required />
+        <FormInput control={control} name="email" label="email" required />
         <FormInput
-          validating={validating}
           type={showPassword ? "text" : "password"}
           control={control}
           name="password"

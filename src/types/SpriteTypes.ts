@@ -1,7 +1,6 @@
 export type SpriteTypes =
   | "icon-arrow-r"
   | "icon-attachment"
-  | "icon-burger"
   | "icon-check"
   | "icon-chevron-r"
   | "icon-error"
@@ -11,4 +10,5 @@ export type SpriteTypes =
   | "icon-icon"
   | "icon-pie-chart"
   | "icon-trash"
-  | "icon-x";
+  | "icon-x1"
+  | "icon-burger1";

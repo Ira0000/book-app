@@ -7,7 +7,7 @@ export const registrationSchema = yup.object().shape({
     .min(2, "Name must be at least 2 characters")
     .max(50, "Name must not exceed 50 characters"),
 
-  mail: yup
+  email: yup
     .string()
     .required("Email is required")
     .matches(
@@ -27,7 +27,7 @@ export const registrationSchema = yup.object().shape({
 });
 
 export const loginSchema = yup.object().shape({
-  mail: yup
+  email: yup
     .string()
     .required("Email is required")
     .matches(

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function LibraryPage() {
-  return <div>LibraryPage</div>;
+  return <div>LibraryPage:</div>;
 }

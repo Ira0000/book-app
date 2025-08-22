@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -6,20 +7,34 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "@/ui/FormInput";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function RegistrationForm() {
   const { control, handleSubmit } = useForm<RegisterFormData>({
     resolver: yupResolver(registrationSchema),
     defaultValues: {
       name: "",
-      mail: "",
+      email: "",
       password: "",
     },
     mode: "onChange",
   });
-  const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = (data: RegisterFormData) => console.log(data);
+  const [showPassword, setShowPassword] = useState(false);
+  const { signUp } = useAuth();
+  const router = useRouter();
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      await signUp(data);
+      console.log("Registration successful!");
+      router.push("/");
+    } catch (err: any) {
+      console.error("Registration failed:", err.message);
+    }
+  };
+
+  // useGuestOnly();
 
   return (
     <form
@@ -38,8 +53,8 @@ export default function RegistrationForm() {
         <FormInput
           validationVisible={true}
           control={control}
-          name="mail"
-          label="mail"
+          name="email"
+          label="email"
           required
         />
         <FormInput
