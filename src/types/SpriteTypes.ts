@@ -10,5 +10,5 @@ export type SpriteTypes =
   | "icon-icon"
   | "icon-pie-chart"
   | "icon-trash"
-  | "icon-x1"
+  | "icon-x"
   | "icon-burger1";

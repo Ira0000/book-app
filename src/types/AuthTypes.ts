@@ -30,73 +30,15 @@ export interface User {
 }
 
 export interface AuthState {
-  user: User | null;
   token: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-}
-
-export interface AuthActions {
-  signUp: (data: SignUpRequest) => Promise<void>;
-  signIn: (data: SignInRequest) => Promise<void>;
-  signOut: () => Promise<void>;
-  refreshAccessToken: () => Promise<void>;
-  getCurrentUser: () => Promise<void>;
-  clearError: () => void;
-  setLoading: (loading: boolean) => void;
-  initializeAuth: () => void;
-}
-
-export interface AuthStoreState {
   user: User | null;
-  token: string | null;
-  refreshToken: string | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export interface AuthStoreActions {
-  signUp: (data: SignUpRequest) => Promise<void>;
-  signIn: (data: SignInRequest) => Promise<void>;
+  initializeAuth: () => Promise<void>;
+  signIn: (data: SignInRequest) => Promise<AuthResponse>;
+  signUp: (data: SignUpRequest) => Promise<AuthResponse>;
+  refreshAccessToken: () => Promise<{ token: string; refreshToken: string }>;
   signOut: () => Promise<void>;
-  refreshAccessToken: () => Promise<void>;
-  getCurrentUser: () => Promise<void>;
-  clearError: () => void;
-  setLoading: (loading: boolean) => void;
-  initializeAuth: () => void;
-  resetAuth: () => void;
-  updateUser: (user: Partial<User>) => void;
-  setError: (error: string) => void;
-}
-
-export type AuthStore = AuthStoreState & AuthStoreActions;
-
-// Additional utility types for better type safety
-export interface ApiError {
-  message: string;
-  status?: number;
-  code?: string;
-}
-
-export interface AuthContextType {
-  store: AuthStore;
-  isInitialized: boolean;
-}
-
-export interface TokenPayload {
-  sub: string;
-  email: string;
-  exp: number;
-  iat: number;
-}
-
-export interface AuthConfig {
-  apiBaseUrl: string;
-  tokenKey: string;
-  refreshTokenKey: string;
-  enableAutoRefresh: boolean;
-  refreshThreshold: number; // minutes before expiry to refresh
 }

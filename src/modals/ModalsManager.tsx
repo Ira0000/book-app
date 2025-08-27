@@ -11,8 +11,7 @@ import AddToLibraryModal from "./AddToLibraryModal";
 const modals = [
   {
     name: "burger",
-    className:
-      "flex h-full flex-col items-center gap-12 bg-grey p-10 text-white",
+    className: "flex h-full w-[50%] bg-grey px-10 py-8 text-white",
     backdrop: "fixed inset-0 z-50 flex justify-end bg-grey-400/75  md:bottom-0",
   },
   {

@@ -1,3 +1,10 @@
+import NavigationBar from "@/components/NavigationBar";
+
 export default function LibraryPage() {
-  return <div>LibraryPage:</div>;
+  return (
+    <div>
+      <NavigationBar />
+      LibraryPage:
+    </div>
+  );
 }
