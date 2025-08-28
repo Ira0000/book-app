@@ -24,6 +24,11 @@ export default function LoginForm() {
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
+    if (!signIn) {
+      console.error("Authentication store is not ready yet.");
+      return;
+    }
+
     try {
       await signIn(data);
       console.log("Login successful!");

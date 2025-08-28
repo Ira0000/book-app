@@ -17,9 +17,9 @@ export interface Book {
 }
 
 export interface BookRecommendationRequest {
-  title: string;
-  author: string;
-  page: number;
+  title: string | undefined;
+  author: string | undefined;
+  page: number | undefined;
   limit: number;
 }
 

@@ -1,34 +1,19 @@
 "use client";
 
-import { useAuthStore } from "@/store/authStore";
-import { useBookStore } from "@/store/bookStore";
-import { BookRecommendationRequest } from "@/types/BookTypes";
-import { useEffect } from "react";
+import EmblaCarousel from "@/components/EmblaCarousel/EmblaCarousel";
+import { Book } from "@/types/BookTypes";
 
-export default function RecommendedSection() {
-  const { recommendedBooks, isLoading, error, fetchRecommendedBooks } =
-    useBookStore();
-  const { isAuthenticated } = useAuthStore(); // Example of checking auth state
+type RecommendedSectionType = {
+  isLoading: boolean;
+  error: string | null;
+  recommendedBooks: Book[];
+};
 
-  useEffect(() => {
-    // Only fetch data if the user is authenticated
-    if (isAuthenticated) {
-      const requestData: BookRecommendationRequest = {
-        page: 1,
-        limit: 10,
-        title: "", // Optional search parameters
-        author: "",
-      };
-      fetchRecommendedBooks(requestData);
-    }
-  }, [isAuthenticated, fetchRecommendedBooks]);
-
-  useEffect(() => {
-    if (recommendedBooks.length > 0) {
-      console.log(recommendedBooks);
-    }
-  }, [recommendedBooks]);
-
+export default function RecommendedSection({
+  isLoading,
+  error,
+  recommendedBooks,
+}: RecommendedSectionType) {
   if (isLoading) {
     return <div>Loading recommended books...</div>;
   }
@@ -37,9 +22,14 @@ export default function RecommendedSection() {
     return <div>Error: {error}</div>;
   }
 
+  if (recommendedBooks.length < 1) {
+    return <div>No books found</div>;
+  }
+
   return (
-    <div className="bg-grey-dark rounded-[30px] px-[20px] py-10">
-      RecommendedSection
+    <div className="relative">
+      <h2 className="text-xl text-milk-white mb-[34px]">Recommended</h2>
+      <EmblaCarousel slides={recommendedBooks} />
     </div>
   );
 }

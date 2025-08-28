@@ -25,6 +25,11 @@ export default function RegistrationForm() {
   const { signUp } = useAuth();
   const router = useRouter();
   const onSubmit = async (data: RegisterFormData) => {
+    if (!signUp) {
+      console.error("Authentication store is not ready yet.");
+      return;
+    }
+
     try {
       await signUp(data);
       console.log("Registration successful!");

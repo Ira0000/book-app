@@ -1,6 +1,6 @@
 import { BookRecommendationResponse } from "./../types/BookTypes";
 import { BookRecommendationRequest } from "@/types/BookTypes";
-import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from "axios";
+import { AxiosResponse } from "axios";
 import apiClient from "./apiServices";
 
 export const bookService = {

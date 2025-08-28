@@ -67,14 +67,14 @@ export default function FormInput({
         {label && (
           <label
             htmlFor={name}
-            className="capitalize  text-small text-grey-form "
+            className="capitalize whitespace-nowrap  text-small text-grey-form "
           >
             {label}:
           </label>
         )}
         <input
           id={name}
-          className="outline-none w-full h-full overflow-hidden "
+          className="outline-none flex-1 h-full overflow-hidden cursor-pointer"
           autoComplete="on"
           {...field}
           {...inputProps}

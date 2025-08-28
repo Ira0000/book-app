@@ -15,11 +15,15 @@
   --color-grey-form: #686868;
   --color-grey-light: #e3e3e380;
   --color-milk-white: #f9f9f9;
+  --color-white-transp: #f9f9f933;
   --color-red: #e90516;
   --color-green: #30b94d;
   --text-xxl: 32px;
   --text-xxl--font-weight: bold;
   --text-xxl--line-height: 32px;
+  --text-xl: 20px;
+  --text-xl--font-weight: bold;
+  --text-xl--line-height: 20px;
   --text-large: 14px;
   --text-large--font-weight: bold;
   --text-large--line-height: 18px;
