@@ -15,7 +15,7 @@ export default function ArrowButton({
 }: ArrowButtonPropType) {
   return (
     <button
-      className="size-[32px] cursor-pointer rounded-full border border-white-transp
+      className="size-[32px] md:size-[40px] cursor-pointer rounded-full border border-white-transp
         transition-colors hover:border-milk-white disabled:cursor-not-allowed 
         "
       type="button"

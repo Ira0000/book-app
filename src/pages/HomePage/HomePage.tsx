@@ -43,10 +43,10 @@ export default function HomePage() {
   return (
     <div>
       Home Page
-      <div className="bg-grey-dark rounded-[30px] p-[20px]">
+      <div className="bg-grey-dark rounded-[30px] p-[20px] md:p-8">
         <FilterForm onSubmit={onFilterSubmit} />
       </div>
-      <div className="bg-grey-dark rounded-[30px] px-[20px] py-10">
+      <div className="bg-grey-dark rounded-[30px] px-[20px] py-10 md:p-10">
         <RecommendedSection
           isLoading={isLoading}
           error={error}

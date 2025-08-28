@@ -28,7 +28,9 @@ export default function RecommendedSection({
 
   return (
     <div className="relative">
-      <h2 className="text-xl text-milk-white mb-[34px]">Recommended</h2>
+      <h2 className="text-xl md:text-xxl text-milk-white mb-[34px] md:mb-[28px]">
+        Recommended
+      </h2>
       <EmblaCarousel slides={recommendedBooks} />
     </div>
   );
