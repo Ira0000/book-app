@@ -5,7 +5,7 @@ export const filterRecommendedBookSchema = yup.object().shape({
   author: yup.string(),
 });
 
-export const filterLibraryBookSchema = yup.object().shape({
+export const AddBookSchema = yup.object().shape({
   title: yup
     .string()
     .required()
@@ -16,13 +16,13 @@ export const filterLibraryBookSchema = yup.object().shape({
     .required()
     .min(2, "Title must be at least 2 characters")
     .max(50, "Title must not exceed 50 characters"),
-  page: yup.number().required(),
+  totalPages: yup.number().required(),
 });
 
 export type FilterRecommendedFormData = yup.InferType<
   typeof filterRecommendedBookSchema
 >;
 
-export type FilterLibraryFormData = yup.InferType<
-  typeof filterLibraryBookSchema
+export type AddBookFormData = yup.InferType<
+  typeof AddBookSchema
 >;
