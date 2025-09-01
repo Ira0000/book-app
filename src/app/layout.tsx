@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/components/AuthProvider";
-import { ModalProvider } from "@/components/ModalProvider";
-import ModalManager from "@/modals/ModalsManager";
+import { AuthProvider } from "@/components/Providers/AuthProvider";
+import { ModalProvider } from "@/components/Providers/ModalProvider";
+import ModalManager from "@/components/Modals/ModalsManager";
 
 export const metadata: Metadata = {
   title: "Book App",

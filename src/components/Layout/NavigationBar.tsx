@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import Icon from "@/ui/Icon";
+import Icon from "@/components/Ui/Icon";
 import React from "react";
-import { useModal } from "./ModalProvider";
+import { useModal } from "../Providers/ModalProvider";
 
 export default function NavigationBar() {
   const userName = "I";

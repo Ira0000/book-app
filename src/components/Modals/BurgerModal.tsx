@@ -1,9 +1,9 @@
 "use client";
 
-import { useModal } from "@/components/ModalProvider";
+import { useModal } from "@/components/Providers/ModalProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/cn";
-import Icon from "@/ui/Icon";
+import Icon from "@/components/Ui/Icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -18,7 +18,7 @@ export default function BurgerModal() {
     closeModal("burger");
   };
 
-  const isHomePageActive = pathname === "/";
+  const isHomePageActive = pathname === "/recommended";
   const isLibraryPageActive = pathname === "/library";
 
   return (
@@ -34,7 +34,7 @@ export default function BurgerModal() {
           </button>
         </li>
         <li className="flex flex-col gap-4 text-grey-form text-large lg:cursor-pointer">
-          <Link href="/" onClick={() => closeModal("burger")}>
+          <Link href="/recommended" onClick={() => closeModal("burger")}>
             <span
               className={cn({
                 "relative after:content-[''] after:w-[100%] after:absolute after:translate-y-1 after:bottom-0 after:left-0 after:h-[3px] after:bg-[#4F92F7] after:rounded-xs":

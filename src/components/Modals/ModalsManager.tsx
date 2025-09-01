@@ -1,6 +1,6 @@
 "use client";
 
-import { useModal } from "@/components/ModalProvider";
+import { useModal } from "@/components/Providers/ModalProvider";
 import { Media, MediaContextProvider } from "@/helpers/Media";
 import { animated, SpringValue, useTransition } from "@react-spring/web";
 import { usePathname } from "next/navigation";

@@ -1,4 +1,4 @@
-import RegistrationForm from "@/forms/RegistrationForm";
+import RegistrationForm from "@/components/Forms/RegistrationForm";
 import AuthSection from "@/sections/AuthSection";
 import React from "react";
 

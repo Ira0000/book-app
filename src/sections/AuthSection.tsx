@@ -1,4 +1,4 @@
-import Icon from "@/ui/Icon";
+import Icon from "@/components/Ui/Icon";
 import Image from "next/image";
 import React, { PropsWithChildren } from "react";
 

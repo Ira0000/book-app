@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import Icon from "@/ui/Icon";
+import Icon from "@/components/Ui/Icon";
 import React, { MouseEventHandler } from "react";
 
 type ArrowButtonPropType = {

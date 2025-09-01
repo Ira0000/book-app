@@ -39,7 +39,7 @@ export default function EmblaCarousel({ slides }: EmblaCarouselType) {
   const groupedSlides = [];
   for (let i = 0; i < slides.length; i += 2) {
     groupedSlides.push(slides.slice(i, i + 2));
-    console.log(groupedSlides);
+    // console.log(groupedSlides);
   }
 
   return (

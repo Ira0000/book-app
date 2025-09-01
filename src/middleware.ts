@@ -7,6 +7,7 @@ export function middleware(request: NextRequest) {
   const isAuthenticated =
     request.cookies.get("isAuthenticated")?.value === "true";
   const pathname = request.nextUrl.pathname;
+  const REDIRECT_ON_AUTH = "/recommended";
 
   // Skip middleware for API routes, static files, etc.
   if (
@@ -24,7 +25,9 @@ export function middleware(request: NextRequest) {
       const response = NextResponse.redirect(url);
       return response;
     }
-    return NextResponse.next();
+    const url = new URL(REDIRECT_ON_AUTH, request.url);
+    const response = NextResponse.redirect(url);
+    return response;
   }
 
   // Protected routes - redirect to login if not authenticated
@@ -44,7 +47,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(route)
   );
   if (isGuestOnlyRoute && isAuthenticated) {
-    const redirectUrl = request.nextUrl.searchParams.get("redirect") || "/";
+    const redirectUrl =
+      request.nextUrl.searchParams.get("redirect") || REDIRECT_ON_AUTH;
     const url = new URL(redirectUrl, request.url);
     const response = NextResponse.redirect(url);
     return response;
