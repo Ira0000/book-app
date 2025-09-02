@@ -1,5 +1,6 @@
 "use client";
 
+import { Book } from "@/types/BookTypes";
 import {
   createContext,
   ReactNode,
@@ -8,13 +9,20 @@ import {
   useState,
 } from "react";
 
+type ModalData = { message?: string } | Book | null;
+
 type ModalState = {
   [key: string]: boolean;
 };
 
+type ModalDataContext = {
+  [key: string]: ModalData | null;
+};
+
 type ModalContextType = {
   modals: ModalState;
-  openModal: (name: string) => void;
+  modalData: ModalDataContext;
+  openModal: (name: string, data?: ModalData) => void;
   closeModal: (name: string) => void;
   toggleModal: (name: string) => void;
   isModalOpen: (name: string) => boolean;
@@ -28,26 +36,29 @@ type ModalProviderProps = {
 
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [modals, setModals] = useState<ModalState>({});
+  const [modalData, setModalData] = useState<ModalDataContext>({});
 
-  const openModal = (name: string) => {
-    // FIX: Merge with previous state instead of overwriting
+  const openModal = (name: string, data: ModalData = null) => {
     setModals((prev) => ({ ...prev, [name]: true }));
+    setModalData((prev) => ({ ...prev, [name]: data }));
   };
 
   const closeModal = (name: string) => {
-    // This function is correct as is
     setModals((prev) => ({ ...prev, [name]: false }));
+    setModalData((prev) => ({ ...prev, [name]: null }));
   };
 
-  const toggleModal = (name: string) => {
-    // FIX: Merge with previous state instead of overwriting or clearing
-    setModals((prev) => ({ ...prev, [name]: !prev[name] }));
+  const toggleModal = (name: string, data: ModalData = null) => {
+    if (modals[name]) {
+      closeModal(name);
+    } else {
+      openModal(name, data);
+    }
   };
 
   const isModalOpen = (name: string) => !!modals[name];
 
   useEffect(() => {
-    // This is a great piece of code for controlling body overflow!
     const hasOpenModal = Object.values(modals).some((isOpen) => isOpen);
 
     if (hasOpenModal) {
@@ -63,7 +74,14 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 
   return (
     <ModalContext.Provider
-      value={{ modals, openModal, closeModal, toggleModal, isModalOpen }}
+      value={{
+        modals,
+        openModal,
+        modalData,
+        closeModal,
+        toggleModal,
+        isModalOpen,
+      }}
     >
       {children}
     </ModalContext.Provider>

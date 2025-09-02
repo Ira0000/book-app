@@ -3,12 +3,20 @@ import Image from "next/image";
 
 type BookCardPropType = {
   slide: Book;
+  imageStyle?: string;
+  wrapperStyle?: string;
+  textStyle?: string;
 };
 
-export default function BookCard({ slide }: BookCardPropType) {
+export default function BookCard({
+  slide,
+  imageStyle,
+  wrapperStyle,
+  textStyle,
+}: BookCardPropType) {
   return (
-    <div className="w-full flex flex-col gap-2">
-      <div className="rounded-[8px] relative w-full aspect-[137/208]">
+    <div className={`w-full flex flex-col gap-2 ${wrapperStyle}`}>
+      <div className={`rounded-[8px] relative aspect-[137/208] ${imageStyle}`}>
         <Image
           className="rounded-[8px] object-cover"
           src={slide.imageUrl}
@@ -18,10 +26,12 @@ export default function BookCard({ slide }: BookCardPropType) {
         />
       </div>
       <div className="flex flex-col gap-[2px]">
-        <h3 className="w-full text-large text-milk-white truncate">
+        <h3
+          className={`w-full text-large text-milk-white truncate ${textStyle}`}
+        >
           {slide.title}
         </h3>
-        <p className="w-full text-small text-grey-form truncate">
+        <p className={`w-full text-small text-grey-form truncate ${textStyle}`}>
           {slide.author}
         </p>
       </div>

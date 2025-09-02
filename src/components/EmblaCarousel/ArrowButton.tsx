@@ -26,10 +26,13 @@ export default function ArrowButton({
         id="icon-chevron-r"
         h={16}
         w={16}
-        className={cn("flex items-center justify-center stroke-milk-white", {
-          "rotate-180": isLeft,
-          "stroke-white-transp": disabled,
-        })}
+        className={cn(
+          "flex items-center justify-center stroke-milk-white fill-transparent",
+          {
+            "rotate-180": isLeft,
+            "stroke-white-transp": disabled,
+          }
+        )}
       />
     </button>
   );

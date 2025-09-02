@@ -5,23 +5,41 @@ import { Media, MediaContextProvider } from "@/helpers/Media";
 import { animated, SpringValue, useTransition } from "@react-spring/web";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import BurgerModal from "./BurgerModal";
 import AddToLibraryModal from "./AddToLibraryModal";
+import BurgerModal from "./BurgerModal";
+import AddedToLibraryModal from "./AddedToLibraryModal";
+import ErrorModal from "./ErrorModal";
+import { Book } from "@/types/BookTypes";
 
 const modals = [
   {
     name: "burger",
     className: "flex h-full w-[50%] bg-grey px-10 py-8 text-white",
-    backdrop: "fixed inset-0 z-50 flex justify-end bg-grey-400/75  md:bottom-0",
+    backdrop: "fixed inset-0 z-50 flex justify-end bg-black/50  ",
   },
   {
     name: "addToLibrary",
     className:
-      "flex h-full flex-col items-center gap-12 bg-grey-400 p-12 text-white",
+      "w-[335px] mx-[20px]  md:w-[500px]  bg-grey-dark rounded-xl border border-[#68686833]",
     backdrop:
-      "fixed inset-0 z-50 flex justify-end bg-grey-400/75 bottom-26 md:bottom-0",
+      "fixed inset-0 z-50 flex justify-center items-center bg-black/50  ",
+  },
+  {
+    name: "addedToLibrary",
+    className:
+      "w-[335px] mx-[20px] h-[272px] md:w-[342px] md:h-[290px]  bg-grey-dark rounded-xl border border-[#68686833]",
+    backdrop:
+      "fixed inset-0 z-50 flex justify-center items-center bg-black/50  ",
+  },
+  {
+    name: "error",
+    className:
+      "w-[335px] mx-[20px] h-[272px] md:w-[342px] md:h-[290px]  bg-grey-dark rounded-xl border border-[#68686833]",
+    backdrop:
+      "fixed inset-0 z-50 flex justify-center items-center bg-black/50  ",
   },
 ];
+
 type ModalType = {
   name: string;
   className: string;
@@ -32,13 +50,14 @@ type AnimationStyle = {
   opacity: SpringValue<number>;
   transform: SpringValue<string>;
 };
+
 export default function ModalManager() {
   const pathname = usePathname();
   const {
     isModalOpen,
-    toggleModal,
     closeModal,
     modals: activeModals,
+    modalData,
   } = useModal();
 
   const prevPathnameRef = useRef<string | null>(null);
@@ -57,19 +76,9 @@ export default function ModalManager() {
   const transitions = useTransition<ModalType, AnimationStyle>(
     modals.filter((modal) => isModalOpen(modal.name)),
     {
-      from: (modal) =>
-        modal.name === "search"
-          ? { transform: "translateY(-3%)", opacity: 0 }
-          : { transform: "translateX(100%)", opacity: 0 },
-
-      enter: (modal) =>
-        modal.name === "search"
-          ? { transform: "translateY(0%)", opacity: 1 }
-          : { transform: "translateX(0%)", opacity: 1 },
-      leave: (modal) =>
-        modal.name === "search"
-          ? { transform: "translateY(0%)", opacity: 0 }
-          : { transform: "translateX(100%)", opacity: 0 },
+      from: { transform: "translateX(100%)", opacity: 0 },
+      enter: { transform: "translateX(0%)", opacity: 1 },
+      leave: { transform: "translateX(100%)", opacity: 0 },
       keys: (modal) => modal.name,
     }
   );
@@ -89,7 +98,7 @@ export default function ModalManager() {
               <animated.div
                 className={modal.backdrop}
                 style={{ opacity: style.opacity }}
-                onClick={() => toggleModal(modal.name)}
+                onClick={() => closeModal(modal.name)}
               >
                 <animated.div
                   style={{ transform: style.transform }}
@@ -97,7 +106,15 @@ export default function ModalManager() {
                   key={modal.name}
                   className={modal.className}
                 >
-                  {modal.name === "addToLibrary" && <AddToLibraryModal />}
+                  {modal.name === "addToLibrary" && (
+                    <AddToLibraryModal book={modalData.addToLibrary as Book} />
+                  )}
+                  {modal.name === "addedToLibrary" && <AddedToLibraryModal />}
+                  {modal.name === "error" && (
+                    <ErrorModal
+                      error={modalData.error as { message?: string }}
+                    />
+                  )}
                 </animated.div>
               </animated.div>
             )
@@ -114,7 +131,7 @@ export default function ModalManager() {
             ) => (
               <animated.div
                 className={modal.backdrop}
-                onClick={() => toggleModal(modal.name)}
+                onClick={() => closeModal(modal.name)}
               >
                 <animated.div
                   onClick={(e) => e.stopPropagation()}
@@ -123,7 +140,10 @@ export default function ModalManager() {
                   className={modal.className}
                 >
                   {modal.name === "burger" && <BurgerModal />}
-                  {modal.name === "addToLibrary" && <AddToLibraryModal />}
+                  {modal.name === "addToLibrary" && (
+                    <AddToLibraryModal book={modalData.addToLibrary as Book} />
+                  )}
+                  {modal.name === "addedToLibrary" && <AddedToLibraryModal />}
                 </animated.div>
               </animated.div>
             )

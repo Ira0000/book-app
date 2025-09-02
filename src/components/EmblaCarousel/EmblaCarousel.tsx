@@ -7,6 +7,7 @@ import usePrevNextButtons from "@/hooks/usePrevNextButtons";
 import ArrowButton from "./ArrowButton";
 import BookCard from "../BookCard";
 import { Media, MediaContextProvider } from "@/helpers/Media";
+import { useModal } from "../Providers/ModalProvider";
 
 type EmblaCarouselType = {
   slides: Book[];
@@ -35,6 +36,8 @@ export default function EmblaCarousel({ slides }: EmblaCarouselType) {
     onPrevButtonClick,
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
+
+  const { openModal } = useModal();
 
   const groupedSlides = [];
   for (let i = 0; i < slides.length; i += 2) {
@@ -66,6 +69,7 @@ export default function EmblaCarousel({ slides }: EmblaCarouselType) {
               <ul className="flex w-full gap-[21px] md:flex-wrap md:gap-[25px] lg:gap-[20px]">
                 {slides.map((slide) => (
                   <li
+                    onClick={() => openModal("addToLibrary", slide)}
                     key={`mobile-${slide._id}`}
                     className="flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-21px)/2)] md:w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)]"
                   >
@@ -89,7 +93,10 @@ export default function EmblaCarousel({ slides }: EmblaCarouselType) {
                     <ul className="flex flex-col gap-[27px]">
                       {slideGroup.map((slide) => {
                         return (
-                          <li key={`tablet-${slide._id}`}>
+                          <li
+                            key={`tablet-${slide._id}`}
+                            onClick={() => openModal("addToLibrary", slide)}
+                          >
                             <BookCard slide={slide} />
                           </li>
                         );
