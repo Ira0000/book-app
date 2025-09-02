@@ -1,6 +1,6 @@
 "use client";
 
-import { Book } from "@/types/BookTypes";
+import { UserBookResponse, Book } from "@/types/BookTypes";
 import {
   createContext,
   ReactNode,
@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-type ModalData = { message?: string } | Book | null;
+type ModalData = { message?: string } | Book | null | UserBookResponse;
 
 type ModalState = {
   [key: string]: boolean;

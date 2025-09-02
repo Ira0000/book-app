@@ -15,13 +15,15 @@ type AddToLibraryModalProps = {
 export default function AddToLibraryModal({ book }: AddToLibraryModalProps) {
   const { closeModal, openModal } = useModal();
 
-  const { addBookToLibraryById, userLibrary } = useBookStore();
+  const { addBookToLibraryById } = useBookStore();
 
-  const handleAddToLibrary = async (id: string) => {
+  const handleAddToLibrary = async (book: Book) => {
     try {
-      await addBookToLibraryById(id);
-      closeModal("addToLibrary");
-      openModal("addedToLibrary");
+      await addBookToLibraryById(book);
+      // console.log(id);
+
+      // closeModal("addToLibrary");
+      // openModal("addedToLibrary");
     } catch (error: any) {
       let errorMessage = "An unexpected error occurred.";
 
@@ -51,6 +53,10 @@ export default function AddToLibraryModal({ book }: AddToLibraryModalProps) {
   if (!book) {
     return <div>No book data available.</div>;
   }
+
+  // if (book) {
+  //   console.log(book._id);
+  // }
   return (
     <div className="relative flex p-10 flex-col size-full items-center gap-[20px] text-milk-white">
       <button
@@ -71,7 +77,7 @@ export default function AddToLibraryModal({ book }: AddToLibraryModalProps) {
       </div>
       <button
         type="button"
-        onClick={() => handleAddToLibrary(book._id)}
+        onClick={() => handleAddToLibrary(book)}
         className="text-milk-white text-large px-6 bg-transparent py-3 rounded-[30px] border border-white-transp lg:cursor-pointer lg:hover:bg-milk-white lg:hover:text-grey-dark"
       >
         Add to library

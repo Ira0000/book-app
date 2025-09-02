@@ -1,15 +1,16 @@
 export interface BookState {
   recommendedBooks: Book[];
-  userLibrary: AddBookResponse[];
+  userLibrary: UserBookResponse[];
   selectedBook: UserBookResponse | null;
   isLoading: boolean;
   error: string | null;
   totalPages: number;
   currentPage: number;
+  setSelectedBook: (book: UserBookResponse) => void;
   fetchRecommendedBooks: (request: BookRecommendationRequest) => Promise<void>;
   fetchUserLibrary: (request?: BookStatus) => Promise<void>;
   addBookToLibrary: (request: AddBookRequest) => Promise<void>;
-  addBookToLibraryById: (id: string) => Promise<void>;
+  addBookToLibraryById: (book: Book) => Promise<void>;
   deleteBookFromLibrary: (id: string) => Promise<void>;
   getReadingBookInfo: (id: string) => Promise<void>;
   startReading: ({ id, page }: ReadingBookRequest) => Promise<void>;
@@ -23,7 +24,7 @@ export interface Book {
   author: string;
   imageUrl: string;
   totalPages: number;
-  recommend: boolean;
+  recommend?: boolean;
 }
 
 export interface BookRecommendationRequest {
@@ -44,17 +45,6 @@ export interface AddBookRequest {
   title: string | undefined;
   author: string | undefined;
   totalPages: number | undefined;
-}
-
-export interface AddBookResponse {
-  _id: string;
-  title: string;
-  author: string;
-  imageUrl: string;
-  totalPages: number;
-  status: BookStatus;
-  owner: string;
-  progress: BookProgress[];
 }
 
 export type BookStatus = "unread" | "in-progress" | "done" | "";
@@ -86,7 +76,7 @@ export interface UserBookResponse {
   status: BookStatus;
   owner: string;
   progress: BookProgress[];
-  timeLeftToRead: {
+  timeLeftToRead?: {
     hours: number;
     minutes: number;
     seconds: number;

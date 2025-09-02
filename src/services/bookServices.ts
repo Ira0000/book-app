@@ -1,6 +1,6 @@
 import {
   AddBookRequest,
-  AddBookResponse,
+  UserBookResponse,
   BookRecommendationResponse,
   BookStatus,
   DeleteBookResponse,
@@ -29,9 +29,9 @@ export const bookService = {
     }
   },
 
-  async getUserLibrary(status: BookStatus = ""): Promise<AddBookResponse[]> {
+  async getUserLibrary(status: BookStatus = ""): Promise<UserBookResponse[]> {
     try {
-      const response: AxiosResponse<AddBookResponse[]> = await apiClient.get(
+      const response: AxiosResponse<UserBookResponse[]> = await apiClient.get(
         "/books/own",
         {
           params: status,
@@ -43,9 +43,9 @@ export const bookService = {
     }
   },
 
-  async addBookToLibrary(data: AddBookRequest): Promise<AddBookResponse> {
+  async addBookToLibrary(data: AddBookRequest): Promise<UserBookResponse> {
     try {
-      const response: AxiosResponse<AddBookResponse> = await apiClient.post(
+      const response: AxiosResponse<UserBookResponse> = await apiClient.post(
         "/books/add",
         data
       );
@@ -55,9 +55,9 @@ export const bookService = {
     }
   },
 
-  async addBookToLibraryById(id: string): Promise<AddBookResponse> {
+  async addBookToLibraryById(id: string): Promise<UserBookResponse> {
     try {
-      const response: AxiosResponse<AddBookResponse> = await apiClient.post(
+      const response: AxiosResponse<UserBookResponse> = await apiClient.post(
         `/books/add/${id}`
       );
       return response.data;
@@ -90,9 +90,9 @@ export const bookService = {
   async startReadingBook({
     id,
     page,
-  }: ReadingBookRequest): Promise<AddBookResponse> {
+  }: ReadingBookRequest): Promise<UserBookResponse> {
     try {
-      const response: AxiosResponse<AddBookResponse> = await apiClient.post(
+      const response: AxiosResponse<UserBookResponse> = await apiClient.post(
         `/books/reading/start`,
         { id, page }
       );

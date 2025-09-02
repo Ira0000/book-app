@@ -2,11 +2,13 @@
 import { create } from "zustand";
 import {
   AddBookRequest,
+  Book,
   BookRecommendationRequest,
   BookState,
   BookStatus,
   deleteReadingSessionRequest,
   ReadingBookRequest,
+  UserBookResponse,
 } from "@/types/BookTypes";
 import { persist } from "zustand/middleware";
 import { bookService } from "@/services/bookServices";
@@ -21,6 +23,11 @@ export const useBookStore = create<BookState>()(
       error: null,
       totalPages: 0,
       currentPage: 1,
+
+      setSelectedBook: (book: UserBookResponse) => {
+        set({ selectedBook: book, error: null });
+        console.log("Selected book set:", book);
+      },
 
       fetchRecommendedBooks: async (request: BookRecommendationRequest) => {
         set({ isLoading: true, error: null });
@@ -68,12 +75,10 @@ export const useBookStore = create<BookState>()(
         set({ isLoading: true, error: null });
         try {
           const newBook = await bookService.addBookToLibrary(request);
-          // Update the userLibrary state with the new book
           set((state) => ({
             userLibrary: [...state.userLibrary, newBook],
             isLoading: false,
           }));
-          console.log("✅ Book added to library successfully");
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
@@ -85,15 +90,35 @@ export const useBookStore = create<BookState>()(
         }
       },
 
-      addBookToLibraryById: async (id: string) => {
+      addBookToLibraryById: async (book: Book) => {
         set({ isLoading: true, error: null });
         try {
-          const newBook = await bookService.addBookToLibraryById(id);
+          const bookToAdd = book;
+          const currentLibrary = get().userLibrary;
+          const bookExists = currentLibrary.some((book) => {
+            const titleMatch =
+              book.title?.toLowerCase().trim() ===
+              bookToAdd.title?.toLowerCase().trim();
+            const authorMatch =
+              book.author?.toLowerCase().trim() ===
+              bookToAdd.author?.toLowerCase().trim();
+            return titleMatch && authorMatch;
+          });
+          if (bookExists) {
+            const errorMessage = "Book already is in your library";
+            set({ error: errorMessage, isLoading: false });
+            console.error(`❌ Add book failed: ${errorMessage}`);
+            throw new Error(errorMessage);
+          }
+          const newBook = await bookService.addBookToLibraryById(book._id);
           set((state) => ({
             userLibrary: [...state.userLibrary, newBook],
             isLoading: false,
           }));
         } catch (err: any) {
+          if (err.message === "Book already is in your library") {
+            throw err;
+          }
           const errorMessage =
             err.response?.data?.message ||
             err.message ||

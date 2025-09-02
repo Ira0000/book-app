@@ -9,7 +9,8 @@ import AddToLibraryModal from "./AddToLibraryModal";
 import BurgerModal from "./BurgerModal";
 import AddedToLibraryModal from "./AddedToLibraryModal";
 import ErrorModal from "./ErrorModal";
-import { Book } from "@/types/BookTypes";
+import { UserBookResponse, Book } from "@/types/BookTypes";
+import StartReadingModal from "./StartReadingModal";
 
 const modals = [
   {
@@ -35,6 +36,13 @@ const modals = [
     name: "error",
     className:
       "w-[335px] mx-[20px] h-[272px] md:w-[342px] md:h-[290px]  bg-grey-dark rounded-xl border border-[#68686833]",
+    backdrop:
+      "fixed inset-0 z-50 flex justify-center items-center bg-black/50  ",
+  },
+  {
+    name: "startReading",
+    className:
+      "w-[335px] mx-[20px]  md:w-[500px]  bg-grey-dark rounded-xl border border-[#68686833]",
     backdrop:
       "fixed inset-0 z-50 flex justify-center items-center bg-black/50  ",
   },
@@ -109,6 +117,11 @@ export default function ModalManager() {
                   {modal.name === "addToLibrary" && (
                     <AddToLibraryModal book={modalData.addToLibrary as Book} />
                   )}
+                  {modal.name === "startReading" && (
+                    <StartReadingModal
+                      book={modalData.startReading as UserBookResponse}
+                    />
+                  )}
                   {modal.name === "addedToLibrary" && <AddedToLibraryModal />}
                   {modal.name === "error" && (
                     <ErrorModal
@@ -143,7 +156,17 @@ export default function ModalManager() {
                   {modal.name === "addToLibrary" && (
                     <AddToLibraryModal book={modalData.addToLibrary as Book} />
                   )}
+                  {modal.name === "startReading" && (
+                    <StartReadingModal
+                      book={modalData.startReading as UserBookResponse}
+                    />
+                  )}
                   {modal.name === "addedToLibrary" && <AddedToLibraryModal />}
+                  {modal.name === "error" && (
+                    <ErrorModal
+                      error={modalData.error as { message?: string }}
+                    />
+                  )}
                 </animated.div>
               </animated.div>
             )

@@ -22,13 +22,17 @@ export default function RecommendedPage() {
   if (isLoading) {
     return <div>Loading recommended books...</div>;
   }
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
 
   if (recommendedBooks.length < 1) {
     return <div>No books found</div>;
   }
+
+  // if (recommendedBooks.length > 1) {
+  //   console.log(recommendedBooks);
+  // }
 
   return (
     <div className="relative">
