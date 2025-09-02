@@ -6,8 +6,7 @@ import { BookRecommendationRequest } from "@/types/BookTypes";
 import { useEffect } from "react";
 
 export default function RecommendedPage() {
-  const { recommendedBooks, fetchRecommendedBooks, isLoading, error } =
-    useBookStore();
+  const { recommendedBooks, fetchRecommendedBooks, isLoading } = useBookStore();
   useEffect(() => {
     // Initial fetch on component mount without any filter
     const initialRequest: BookRecommendationRequest = {

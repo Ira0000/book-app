@@ -5,7 +5,7 @@ import { useBookStore } from "@/store/bookStore";
 import { useEffect } from "react";
 
 export default function LibraryPage() {
-  const { userLibrary, fetchUserLibrary, isLoading, error } = useBookStore();
+  const { userLibrary, fetchUserLibrary, isLoading } = useBookStore();
   useEffect(() => {
     // Initial fetch on component mount without any filter
     fetchUserLibrary();
