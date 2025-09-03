@@ -58,7 +58,8 @@ export const useBookStore = create<BookState>()(
       fetchUserLibrary: async (request: BookStatus = "") => {
         set({ isLoading: true, error: null });
         try {
-          const books = await bookService.getUserLibrary(request);
+          const params = request ? { status: request } : {};
+          const books = await bookService.getUserLibrary(params);
           set({ userLibrary: books, isLoading: false });
           console.log("✅ User library fetched successfully");
         } catch (err: any) {

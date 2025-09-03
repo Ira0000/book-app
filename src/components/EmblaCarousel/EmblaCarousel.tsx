@@ -72,6 +72,8 @@ export default function EmblaCarousel({
     deleteBookFromLibrary(id);
   };
 
+  const arrowButtonClass = isLibraryPage && "bottom-0";
+
   if (isLoading) {
     return <Loader />;
   }
@@ -90,7 +92,9 @@ export default function EmblaCarousel({
         <div className="max-w-full">
           {/* Controls */}
           {isButtonsVisible && (
-            <div className="absolute right-0 top-0 z-10 flex gap-2">
+            <div
+              className={`absolute h-8 right-0  z-10 flex gap-2 ${arrowButtonClass}`}
+            >
               <ArrowButton
                 onClick={onPrevButtonClick}
                 disabled={prevBtnDisabled}

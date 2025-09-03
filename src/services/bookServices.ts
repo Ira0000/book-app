@@ -5,6 +5,7 @@ import {
   DeleteBookResponse,
   deleteReadingSessionRequest,
   ReadingBookRequest,
+  UserBookRequest,
   UserBookResponse,
 } from "./../types/BookTypes";
 import { BookRecommendationRequest } from "@/types/BookTypes";
@@ -27,12 +28,12 @@ export const bookService = {
     }
   },
 
-  async getUserLibrary(status: BookStatus = ""): Promise<UserBookResponse[]> {
+  async getUserLibrary(params: UserBookRequest): Promise<UserBookResponse[]> {
     try {
       const response: AxiosResponse<UserBookResponse[]> = await apiClient.get(
         "/books/own",
         {
-          params: status,
+          params: params,
         }
       );
       return response.data;

@@ -1,22 +1,44 @@
 "use client";
 
+import BookStatusFilter from "@/components/BookStatusFilter";
 import EmblaCarousel from "@/components/EmblaCarousel/EmblaCarousel";
 import { useBookStore } from "@/store/bookStore";
-import { useEffect } from "react";
+import { BookStatus } from "@/types/BookTypes";
+import { useEffect, useState } from "react";
+
+const status: string[] = ["All books", "Unread", "In progress", "Done"];
+const statusMapping: Record<string, BookStatus | ""> = {
+  "All books": "",
+  "In progress": "in-progress",
+  Unread: "unread",
+  Done: "done",
+};
 
 export default function LibraryPage() {
   const { userLibrary, fetchUserLibrary, isLoading, error } = useBookStore();
-  useEffect(() => {
-    // Initial fetch on component mount without any filter
-    fetchUserLibrary();
-  }, [fetchUserLibrary]);
+  const [selectedStatus, setSelectedStatus] = useState<BookStatus | string>(
+    status[0]
+  );
 
+  useEffect(() => {
+    const statusForFetch = statusMapping[selectedStatus];
+    fetchUserLibrary(statusForFetch);
+  }, [fetchUserLibrary, selectedStatus]);
+
+  const handleSelect = (value: string) => {
+    setSelectedStatus(value);
+  };
 
   return (
-    <div className="relative py-[20px]">
-      <h2 className="text-xl md:text-xxl text-milk-white mb-[34px] md:mb-[28px]">
-        My library
-      </h2>
+    <div className="relative pt-[20px] pb-[40px]">
+      <div className="flex justify-between mb-[34px] md:mb-[28px]">
+        <h2 className="text-xl md:text-xxl text-milk-white ">My library</h2>
+        <BookStatusFilter
+          selectedStatus={selectedStatus}
+          handleSelect={handleSelect}
+          statusList={status}
+        />
+      </div>
       {userLibrary.length > 0 ? (
         <EmblaCarousel
           error={error}

@@ -10,7 +10,7 @@ export interface BookState {
   fetchRecommendedBooks: (request: BookRecommendationRequest) => Promise<void>;
   fetchUserLibrary: (request?: BookStatus) => Promise<void>;
   addBookToLibrary: (request: AddBookRequest) => Promise<void>;
-  addBookToLibraryById: (book: Book) => Promise<void>;
+  addBookToLibraryById: (book: ) => Promise<void>;
   deleteBookFromLibrary: (id: string) => Promise<void>;
   getReadingBookInfo: (id: string) => Promise<void>;
   startReading: ({ id, page }: ReadingBookRequest) => Promise<void>;
@@ -65,6 +65,10 @@ export interface DeleteBookResponse {
 export interface ReadingBookRequest {
   id: string;
   page: number;
+}
+
+export interface UserBookRequest {
+status?: BookStatus
 }
 
 export interface UserBookResponse {
