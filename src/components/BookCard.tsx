@@ -9,6 +9,8 @@ type BookCardPropType = {
   wrapperStyle?: string;
   textStyle?: string;
   isLibraryPage?: boolean;
+  index?: number;
+  imagePriority?: number;
   handleDeleteBook?: (id: string) => void;
   handleOnCoverClick?: (slide: Book | UserBookResponse) => void;
 };
@@ -21,25 +23,39 @@ export default function BookCard({
   isLibraryPage,
   handleDeleteBook,
   handleOnCoverClick,
+  index,
+  imagePriority,
 }: BookCardPropType) {
+  const shouldPrioritize =
+    typeof index === "number" &&
+    typeof imagePriority === "number" &&
+    index < imagePriority;
+
   return (
     <div className={`w-full flex flex-col gap-2 ${wrapperStyle}`}>
       <div
         onClick={() => handleOnCoverClick && handleOnCoverClick(slide)}
         className={`rounded-[8px] relative aspect-[137/208] ${imageStyle}`}
       >
-        <Image
-          className="rounded-[8px] object-cover"
-          src={slide.imageUrl}
-          fill
-          sizes="auto"
-          alt={`Cover of the book: ${slide.title} by ${slide.author}`}
-        />
+        {slide.imageUrl ? (
+          <Image
+            className="rounded-[8px] object-cover"
+            src={slide.imageUrl}
+            priority={shouldPrioritize}
+            fill
+            sizes="auto"
+            alt={`Cover of the book: ${slide.title} by ${slide.author}`}
+          />
+        ) : (
+          <div className="size-full text-center p-[10px] text-milk-white flex bg-grey-form text-xl items-center justify-center rounded-[8px] object-cover">
+            {slide.title}
+          </div>
+        )}
       </div>
       <div className="flex items-center w-full justify-between">
         <div
           className={cn("flex flex-col gap-[2px] ", {
-            "max-w-[80%]": isLibraryPage,
+            "max-w-[75%]": isLibraryPage,
             "w-full": !isLibraryPage,
           })}
         >

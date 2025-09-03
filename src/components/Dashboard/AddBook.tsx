@@ -19,6 +19,7 @@ export default function AddBook({ onSubmit }: AddBookPropsType) {
     defaultValues: {
       title: "",
       author: "",
+      totalPages: undefined,
     },
     mode: "onChange",
   });
@@ -26,14 +27,31 @@ export default function AddBook({ onSubmit }: AddBookPropsType) {
   return (
     <form
       noValidate
-      className="bg-transparent flex flex-col gap-2"
+      className="bg-transparent flex flex-col gap-5"
       onSubmit={handleSubmit(onSubmit)}
     >
       <h2 className="text-light text-milk-white">Book details</h2>
-      <FormInput control={control} name="title" label="Book title" />
-      <FormInput control={control} name="author" label="The author" />
+      <FormInput
+        validationVisible={true}
+        control={control}
+        name="title"
+        label="Book title"
+        className="pr-[30px]"
+      />
+      <FormInput
+        validationVisible={true}
+        control={control}
+        name="author"
+        label="The author"
+        className="pr-[30px]"
+      />
 
-      <FormInput control={control} name="totalPages" label="Number of pages" />
+      <FormInput
+        validationVisible={true}
+        control={control}
+        name="totalPages"
+        label="Number of pages"
+      />
 
       <button
         type="submit"

@@ -53,7 +53,7 @@ export default function FormInput({
         }}
         className={cn(
           `group items-center relative h-11 w-full rounded-[12px] bg-grey 
-            text-small pl-[14px] flex gap-[10px] transition-colors  ${className}`,
+            text-small pl-[10px] flex gap-[10px] transition-colors  ${className}`,
           {
             "border border-green hover:border-grey-form":
               hasValidationBorder && !errors?.[name],
@@ -74,9 +74,18 @@ export default function FormInput({
         )}
         <input
           id={name}
-          className="outline-none flex-1 h-full overflow-hidden cursor-pointer"
+          className="outline-none flex-1 h-full overflow-hidden cursor-pointer "
           autoComplete="on"
           {...field}
+          value={field.value ?? ""}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (name === "totalPages") {
+              field.onChange(value === "" ? undefined : Number(value));
+            } else {
+              field.onChange(value);
+            }
+          }}
           {...inputProps}
         />
         {isPasswordField &&
@@ -88,7 +97,7 @@ export default function FormInput({
                 e.stopPropagation();
                 toggleShowPassword();
               }}
-              className="absolute right-[16px] top-[13px] cursor-pointer z-10"
+              className="absolute right-[10px] top-[13px] cursor-pointer z-10"
             >
               <Icon
                 id={isPasswordShown ? "icon-eye" : "icon-eye-off"}
@@ -101,10 +110,10 @@ export default function FormInput({
       </div>
       {hasValidationBorder && errors[name] ? (
         <>
-          <div className="absolute right-[16px] top-[13px]">
+          <div className="absolute right-[10px] top-[13px]">
             <Icon className="fill-red" id="icon-error" w={18} h={18} />
           </div>
-          <p className="mt-2 text-light text-red ml-[14px] ">
+          <p className="absolute -bottom-4 left-[10px] text-light text-red ">
             {errors[name].message?.toString()}
           </p>
         </>
@@ -112,11 +121,11 @@ export default function FormInput({
         hasValidationBorder &&
         !errors[name] && (
           <>
-            <div className="absolute right-[16px] top-[13px]">
+            <div className="absolute right-[10px] top-[13px]">
               <Icon className="fill-green" id="icon-check" w={18} h={18} />
             </div>
             {isPasswordField && (
-              <p className="mt-2 text-light text-green ml-[14px] ">
+              <p className="mt-2 text-light text-green ml-[10px] ">
                 Password is secure
               </p>
             )}

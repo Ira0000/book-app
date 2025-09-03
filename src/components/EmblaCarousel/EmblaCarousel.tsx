@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Book, UserBookResponse } from "@/types/BookTypes";
@@ -9,17 +10,26 @@ import BookCard from "../BookCard";
 import { Media, MediaContextProvider } from "@/helpers/Media";
 import { useModal } from "../Providers/ModalProvider";
 import { useBookStore } from "@/store/bookStore";
+import Loader from "../Ui/Loader";
 
-type EmblaCarouselType = {
+type EmblaCarouselPropsType = {
   slides: Book[] | UserBookResponse[];
   options?: EmblaOptionsType;
   isLibraryPage?: boolean;
+  isButtonsVisible?: boolean;
+  carouselStyle?: string;
+  isLoading?: boolean;
+  error?: any;
 };
 
 export default function EmblaCarousel({
+  isButtonsVisible = true,
   slides,
   isLibraryPage,
-}: EmblaCarouselType) {
+  carouselStyle,
+  isLoading = false,
+  error,
+}: EmblaCarouselPropsType) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     loop: false,
@@ -62,34 +72,50 @@ export default function EmblaCarousel({
     deleteBookFromLibrary(id);
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (slides.length < 1) {
+    return <div>No books found</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <>
       <MediaContextProvider>
         <div className="max-w-full">
           {/* Controls */}
-          <div className="absolute right-0 top-0 z-10 flex gap-2">
-            <ArrowButton
-              onClick={onPrevButtonClick}
-              disabled={prevBtnDisabled}
-              isLeft={true}
-            />
-            <ArrowButton
-              onClick={onNextButtonClick}
-              disabled={nextBtnDisabled}
-              isLeft={false}
-            />
-          </div>
+          {isButtonsVisible && (
+            <div className="absolute right-0 top-0 z-10 flex gap-2">
+              <ArrowButton
+                onClick={onPrevButtonClick}
+                disabled={prevBtnDisabled}
+                isLeft={true}
+              />
+              <ArrowButton
+                onClick={onNextButtonClick}
+                disabled={nextBtnDisabled}
+                isLeft={false}
+              />
+            </div>
+          )}
 
           {/* Carousel mobile */}
           <Media lessThan="md">
             <div className="overflow-hidden w-full" ref={emblaRef}>
-              <ul className="flex w-full gap-[21px] md:flex-wrap md:gap-[25px] lg:gap-[20px]">
-                {slides.map((slide) => (
+              <ul className="flex w-full gap-[21px]">
+                {slides.map((slide, index) => (
                   <li
                     key={`mobile-${slide._id}`}
-                    className="flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-21px)/2)] md:w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)]"
+                    className={`flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-21px)/2)] ${carouselStyle}`}
                   >
                     <BookCard
+                      index={index}
+                      imagePriority={2}
                       slide={slide as Book}
                       isLibraryPage={isLibraryPage}
                       handleDeleteBook={handleDeleteBook}
@@ -106,16 +132,21 @@ export default function EmblaCarousel({
           <Media greaterThanOrEqual="md">
             <div className="overflow-hidden w-full" ref={emblaRef}>
               <ul className="flex w-full gap-[21px] md:gap-[25px] lg:gap-[20px]">
-                {groupedSlides.map((slideGroup, index) => (
+                {groupedSlides.map((slideGroup, groupIndex) => (
                   <li
-                    key={index}
-                    className="flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-21px)/2)] md:w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)]"
+                    key={groupIndex}
+                    className={`flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-21px)/2)] md:w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)] ${carouselStyle}`}
                   >
                     <ul className="flex flex-col gap-[27px]">
-                      {slideGroup.map((slide) => {
+                      {slideGroup.map((slide, slideIndexInGroup) => {
+                        const actualSlideIndex =
+                          groupIndex * 2 + slideIndexInGroup;
+
                         return (
                           <li key={`tablet-${slide._id}`}>
                             <BookCard
+                              index={actualSlideIndex}
+                              imagePriority={10}
                               slide={slide as Book}
                               isLibraryPage={isLibraryPage}
                               handleDeleteBook={handleDeleteBook}

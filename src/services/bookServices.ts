@@ -1,11 +1,9 @@
 import {
   AddBookRequest,
-  UserBookResponse,
   BookRecommendationResponse,
   BookStatus,
   DeleteBookResponse,
   deleteReadingSessionRequest,
-  // deleteReadingBookRequest,
   ReadingBookRequest,
   UserBookResponse,
 } from "./../types/BookTypes";

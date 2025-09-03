@@ -1,6 +1,6 @@
 "use client";
 
-import { BookRecommendationRequest } from "@/types/BookTypes";
+import { AddBookRequest, BookRecommendationRequest } from "@/types/BookTypes";
 import FilterForm from "../Forms/FilterForm";
 import { FilterRecommendedFormData } from "../Forms/schemas/filter-schemas";
 import { useBookStore } from "@/store/bookStore";
@@ -8,10 +8,19 @@ import LibraryLink from "./LibraryLink";
 import { usePathname } from "next/navigation";
 import RecommendedLink from "./RecommendedLink";
 import AddBook from "./AddBook";
+import { useModal } from "../Providers/ModalProvider";
 
 export default function Dashboard() {
-  const { fetchRecommendedBooks } = useBookStore();
+  const {
+    fetchRecommendedBooks,
+    recommendedBooks,
+    addBookToLibrary,
+    isLoading,
+  } = useBookStore();
   const pathname = usePathname();
+
+  const { openModal } = useModal();
+
   const onFilterSubmit = async (data: FilterRecommendedFormData) => {
     const requestData: BookRecommendationRequest = {
       page: 1,
@@ -22,14 +31,15 @@ export default function Dashboard() {
     fetchRecommendedBooks(requestData);
   };
 
-  const onAddBookSubmit = async (data: FilterRecommendedFormData) => {
-    const requestData: BookRecommendationRequest = {
-      page: 1,
-      limit: 10,
-      title: data.title, // Optional search parameters
+  const onAddBookSubmit = async (data: AddBookRequest) => {
+    const requestData: AddBookRequest = {
+      title: data.title,
       author: data.author,
+      totalPages: data.totalPages,
     };
-    fetchRecommendedBooks(requestData);
+    addBookToLibrary(requestData);
+    openModal("addedToLibrary");
+    // console.log(requestData);
   };
 
   const isHomePageActive = pathname === "/recommended";
@@ -45,7 +55,11 @@ export default function Dashboard() {
       )}
       {isLibraryPageActive && (
         <>
-          <AddBook onSubmit={onAddBookSubmit} /> <RecommendedLink />
+          <AddBook onSubmit={onAddBookSubmit} />{" "}
+          <RecommendedLink
+            recommendedBooks={recommendedBooks}
+            isLoading={isLoading}
+          />
         </>
       )}
     </div>

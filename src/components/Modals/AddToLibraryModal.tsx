@@ -23,12 +23,11 @@ export default function AddToLibraryModal({ book }: AddToLibraryModalProps) {
       await addBookToLibraryById(book);
       // console.log(id);
 
-      // closeModal("addToLibrary");
-      // openModal("addedToLibrary");
+      closeModal("addToLibrary");
+      openModal("addedToLibrary");
     } catch (error: any) {
       let errorMessage = "An unexpected error occurred.";
 
-      // ✅ Check if the error is an Axios error with a response
       if (
         error &&
         error.response &&

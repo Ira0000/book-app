@@ -45,10 +45,17 @@ export default function LoginForm() {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-2">
-        <FormInput control={control} name="email" label="email" required />
+        <FormInput
+          className="pr-[32px]"
+          control={control}
+          name="email"
+          label="email"
+          required
+        />
         <FormInput
           type={showPassword ? "text" : "password"}
           control={control}
+          className="pr-[35px]"
           name="password"
           label="password"
           required

@@ -5,22 +5,12 @@ import { useBookStore } from "@/store/bookStore";
 import { useEffect } from "react";
 
 export default function LibraryPage() {
-  const { userLibrary, fetchUserLibrary, isLoading } = useBookStore();
+  const { userLibrary, fetchUserLibrary, isLoading, error } = useBookStore();
   useEffect(() => {
     // Initial fetch on component mount without any filter
     fetchUserLibrary();
   }, [fetchUserLibrary]);
 
-  if (isLoading) {
-    return <div>Loading you library books...</div>;
-  }
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
-
-  // if (recommendedBooks.length > 1) {
-  //   console.log(recommendedBooks);
-  // }
 
   return (
     <div className="relative py-[20px]">
@@ -28,7 +18,12 @@ export default function LibraryPage() {
         My library
       </h2>
       {userLibrary.length > 0 ? (
-        <EmblaCarousel slides={userLibrary} isLibraryPage={true} />
+        <EmblaCarousel
+          error={error}
+          isLoading={isLoading}
+          slides={userLibrary}
+          isLibraryPage={true}
+        />
       ) : (
         <div className="flex flex-col justify-center items-center gap-[10px] mb-[20px]">
           <div className="flex items-center justify-center rounded-full size-[100px] bg-grey text-[50px]">

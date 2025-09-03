@@ -18,27 +18,12 @@ export default function RecommendedPage() {
     fetchRecommendedBooks(initialRequest);
   }, [fetchRecommendedBooks]);
 
-  if (isLoading) {
-    return <div>Loading recommended books...</div>;
-  }
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
-
-  if (recommendedBooks.length < 1) {
-    return <div>No books found</div>;
-  }
-
-  // if (recommendedBooks.length > 1) {
-  //   console.log(recommendedBooks);
-  // }
-
   return (
     <div className="relative">
       <h2 className="text-xl md:text-xxl text-milk-white mb-[34px] md:mb-[28px]">
         Recommended
       </h2>
-      <EmblaCarousel slides={recommendedBooks} />
+      <EmblaCarousel isLoading={isLoading} slides={recommendedBooks} />
     </div>
   );
 }
