@@ -2,20 +2,40 @@ export interface BookState {
   recommendedBooks: Book[];
   userLibrary: UserBookResponse[];
   selectedBook: UserBookResponse | null;
-  isLoading: boolean;
-  error: string | null;
+  loading: LoadingStates;
+  errors: ErrorStates;
   totalPages: number;
   currentPage: number;
+  clearError: (errorType: keyof ErrorStates) => void;
+  clearAllErrors: () => void;
   setSelectedBook: (book: UserBookResponse) => void;
   fetchRecommendedBooks: (request: BookRecommendationRequest) => Promise<void>;
   fetchUserLibrary: (request?: BookStatus) => Promise<void>;
   addBookToLibrary: (request: AddBookRequest) => Promise<void>;
-  addBookToLibraryById: (book: ) => Promise<void>;
+  addBookToLibraryById: (book: Book) => Promise<void>;
   deleteBookFromLibrary: (id: string) => Promise<void>;
   getReadingBookInfo: (id: string) => Promise<void>;
   startReading: ({ id, page }: ReadingBookRequest) => Promise<void>;
   finishReading: ({ id, page }: ReadingBookRequest) => Promise<void>;
   deleteReadingSession: (data: deleteReadingSessionRequest) => Promise<void>;
+}
+
+interface LoadingStates {
+  recommendations: boolean;
+  userLibrary: boolean;
+  selectedBook: boolean;
+  addBook: boolean;
+  deleteBook: boolean;
+  reading: boolean;
+}
+
+interface ErrorStates {
+  recommendations: string | null;
+  userLibrary: string | null;
+  selectedBook: string | null;
+  addBook: string | null;
+  deleteBook: string | null;
+  reading: string | null;
 }
 
 export interface Book {
@@ -55,6 +75,7 @@ export type BookProgress = {
   finishReading: string;
   speed: number;
   status: string;
+  _id: string;
 };
 
 export interface DeleteBookResponse {
@@ -68,7 +89,7 @@ export interface ReadingBookRequest {
 }
 
 export interface UserBookRequest {
-status?: BookStatus
+  status?: BookStatus;
 }
 
 export interface UserBookResponse {

@@ -11,4 +11,8 @@ export type SpriteTypes =
   | "icon-pie-chart"
   | "icon-trash"
   | "icon-x"
-  | "icon-burger1";
+  | "icon-burger1"
+  | "icon-hourglass-01"
+  | "icon-pie-chart-02"
+  | "icon-hourglass-02"
+  | "icon-pie-chart-03";

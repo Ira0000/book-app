@@ -12,6 +12,44 @@ import {
 } from "@/types/BookTypes";
 import { persist } from "zustand/middleware";
 import { bookService } from "@/services/bookServices";
+// import { LoadingStates } from "./loadingUtils";
+// import { ErrorStates } from "./errorUtils";
+
+export interface LoadingStates {
+  recommendations: boolean;
+  userLibrary: boolean;
+  selectedBook: boolean;
+  addBook: boolean;
+  deleteBook: boolean;
+  reading: boolean;
+}
+
+export interface ErrorStates {
+  recommendations: string | null;
+  userLibrary: string | null;
+  selectedBook: string | null;
+  addBook: string | null;
+  deleteBook: string | null;
+  reading: string | null;
+}
+
+const initialLoadingState: LoadingStates = {
+  recommendations: false,
+  userLibrary: false,
+  selectedBook: false,
+  addBook: false,
+  deleteBook: false,
+  reading: false,
+};
+
+const initialErrorState: ErrorStates = {
+  recommendations: null,
+  userLibrary: null,
+  selectedBook: null,
+  addBook: null,
+  deleteBook: null,
+  reading: null,
+};
 
 export const useBookStore = create<BookState>()(
   persist(
@@ -19,80 +57,120 @@ export const useBookStore = create<BookState>()(
       recommendedBooks: [],
       userLibrary: [],
       selectedBook: null,
-      isLoading: false,
-      error: null,
+      loading: initialLoadingState,
+      errors: initialErrorState,
       totalPages: 0,
       currentPage: 1,
 
+      clearError: (errorType: keyof ErrorStates) => {
+        set((state) => ({
+          errors: {
+            ...state.errors,
+            [errorType]: null,
+          },
+        }));
+      },
+
+      clearAllErrors: () => {
+        set({ errors: initialErrorState });
+      },
       setSelectedBook: (book: UserBookResponse) => {
-        set({ selectedBook: book, error: null });
-        console.log("Selected book set:", book);
+        set({
+          selectedBook: book,
+          errors: {
+            ...get().errors,
+            selectedBook: null,
+          },
+        });
+        // console.log("Selected book set:", book);
       },
 
       fetchRecommendedBooks: async (request: BookRecommendationRequest) => {
-        set({ isLoading: true, error: null });
+        set((state) => ({
+          loading: { ...state.loading, recommendations: true },
+          errors: { ...state.errors, recommendations: null },
+        }));
         try {
           const response = await bookService.getRecommendedBooks(request);
-          set({
+          set((state) => ({
             recommendedBooks: response.results,
             totalPages: response.totalPages,
             currentPage: response.page,
-            isLoading: false,
-          });
-          console.log("✅ Recommended books fetched successfully");
+            loading: { ...state.loading, recommendations: false },
+          }));
+          // console.log("✅ Recommended books fetched successfully");
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
             err.message ||
             "Failed to fetch recommended books";
-          set({
-            error: errorMessage,
-            isLoading: false,
+          set((state) => ({
+            errors: { ...state.errors, recommendations: errorMessage },
+            loading: { ...state.loading, recommendations: false },
             recommendedBooks: [],
-          });
+          }));
           console.error(`❌ Fetch failed: ${errorMessage}`);
           throw new Error(errorMessage);
         }
       },
 
       fetchUserLibrary: async (request: BookStatus = "") => {
-        set({ isLoading: true, error: null });
+        set((state) => ({
+          loading: { ...state.loading, userLibrary: true },
+          errors: { ...state.errors, userLibrary: null },
+        }));
         try {
           const params = request ? { status: request } : {};
           const books = await bookService.getUserLibrary(params);
-          set({ userLibrary: books, isLoading: false });
-          console.log("✅ User library fetched successfully");
+          set((state) => ({
+            userLibrary: books,
+            loading: { ...state.loading, userLibrary: false },
+          }));
+          // console.log("✅ User library fetched successfully");
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
             err.message ||
             "Failed to fetch user library";
-          set({ error: errorMessage, isLoading: false, userLibrary: [] });
+          set((state) => ({
+            errors: { ...state.errors, userLibrary: errorMessage },
+            loading: { ...state.loading, userLibrary: false },
+            userLibrary: [],
+          }));
           console.error(`❌ Fetch failed: ${errorMessage}`);
           throw new Error(errorMessage);
         }
       },
       addBookToLibrary: async (request: AddBookRequest) => {
-        set({ isLoading: true, error: null });
+        set((state) => ({
+          loading: { ...state.loading, addBook: true },
+          errors: { ...state.errors, addBook: null },
+        }));
         try {
           const newBook = await bookService.addBookToLibrary(request);
           set((state) => ({
             userLibrary: [...state.userLibrary, newBook],
-            isLoading: false,
+            loading: { ...state.loading, addBook: false },
           }));
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
             err.message ||
             "Failed to add book to library";
-          set({ error: errorMessage, isLoading: false });
+          set((state) => ({
+            errors: { ...state.errors, addBook: errorMessage },
+            loading: { ...state.loading, addBook: false },
+          }));
           console.error(`❌ Add book failed: ${errorMessage}`);
           throw new Error(errorMessage);
         }
       },
 
       addBookToLibraryById: async (book: Book) => {
-        set({ isLoading: true, error: null });
+        set((state) => ({
+          loading: { ...state.loading, addBook: true },
+          errors: { ...state.errors, addBook: null },
+        }));
         try {
           const bookToAdd = book;
           const currentLibrary = get().userLibrary;
@@ -107,14 +185,17 @@ export const useBookStore = create<BookState>()(
           });
           if (bookExists) {
             const errorMessage = "Book already is in your library";
-            set({ error: errorMessage, isLoading: false });
+            set((state) => ({
+              errors: { ...state.errors, addBook: errorMessage },
+              loading: { ...state.loading, addBook: false },
+            }));
             console.error(`❌ Add book failed: ${errorMessage}`);
             throw new Error(errorMessage);
           }
           const newBook = await bookService.addBookToLibraryById(book._id);
           set((state) => ({
             userLibrary: [...state.userLibrary, newBook],
-            isLoading: false,
+            loading: { ...state.loading, addBook: false },
           }));
         } catch (err: any) {
           if (err.message === "Book already is in your library") {
@@ -124,97 +205,140 @@ export const useBookStore = create<BookState>()(
             err.response?.data?.message ||
             err.message ||
             "Failed to add book to library";
-          set({ error: errorMessage, isLoading: false });
+          set((state) => ({
+            errors: { ...state.errors, addBook: errorMessage },
+            loading: { ...state.loading, addBook: false },
+          }));
           console.error(`❌ Add book failed: ${errorMessage}`);
           throw new Error(errorMessage);
         }
       },
 
-      deleteBookFromLibrary: async (id) => {
-        set({ isLoading: true, error: null });
+      deleteBookFromLibrary: async (id: string) => {
+        set((state) => ({
+          loading: { ...state.loading, deleteBook: true },
+          errors: { ...state.errors, deleteBook: null },
+        }));
         try {
           await bookService.deleteBookFromLibraryById(id);
           set((state) => ({
             userLibrary: state.userLibrary.filter((book) => book._id !== id),
-            isLoading: false,
+            loading: { ...state.loading, deleteBook: false },
           }));
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
             err.message ||
             "Failed to delete book";
-          set({ error: errorMessage, isLoading: false });
+          set((state) => ({
+            errors: { ...state.errors, deleteBook: errorMessage },
+            loading: { ...state.loading, deleteBook: false },
+          }));
           console.error(`❌ Delete book failed: ${errorMessage}`);
           throw new Error(errorMessage);
         }
       },
       getReadingBookInfo: async (id: string) => {
-        set({ isLoading: true, error: null });
+        set((state) => ({
+          loading: { ...state.loading, selectedBook: true },
+          errors: { ...state.errors, selectedBook: null },
+        }));
         try {
           const book = await bookService.getReadingBookInfo(id);
-          set({ selectedBook: book, isLoading: false });
-          console.log("✅ Book details fetched successfully");
+          set((state) => ({
+            selectedBook: book,
+            loading: { ...state.loading, selectedBook: false },
+          }));
+          // console.log("✅ Book details fetched successfully");
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
             err.message ||
             "Failed to fetch book details";
-          set({ error: errorMessage, isLoading: false, selectedBook: null });
+          set((state) => ({
+            errors: { ...state.errors, selectedBook: errorMessage },
+            loading: { ...state.loading, selectedBook: false },
+            selectedBook: null,
+          }));
           console.error(`❌ Fetch book details failed: ${errorMessage}`);
           throw new Error(errorMessage);
         }
       },
 
       startReading: async ({ id, page }: ReadingBookRequest) => {
-        set({ isLoading: true, error: null });
+        set((state) => ({
+          loading: { ...state.loading, reading: true },
+          errors: { ...state.errors, reading: null },
+        }));
         try {
           await bookService.startReadingBook({ id, page });
           // Optional: Re-fetch the book details or user library to update the state
           await get().getReadingBookInfo(id);
           await get().fetchUserLibrary();
-          set({ isLoading: false });
+          set((state) => ({
+            loading: { ...state.loading, reading: false },
+          }));
           console.log("✅ Reading session started successfully");
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
             err.message ||
             "Failed to start reading";
-          set({ error: errorMessage, isLoading: false });
+          set((state) => ({
+            errors: { ...state.errors, reading: errorMessage },
+            loading: { ...state.loading, reading: false },
+          }));
           console.error(`❌ Start reading failed: ${errorMessage}`);
           throw new Error(errorMessage);
         }
       },
       finishReading: async ({ id, page }: ReadingBookRequest) => {
-        set({ isLoading: true, error: null });
+        set((state) => ({
+          loading: { ...state.loading, reading: true },
+          errors: { ...state.errors, reading: null },
+        }));
         try {
           await bookService.finishReadingBook({ id, page });
           // Re-fetch the book and library to update the UI
           await get().getReadingBookInfo(id);
           await get().fetchUserLibrary();
-          set({ isLoading: false });
+          set((state) => ({
+            loading: { ...state.loading, reading: false },
+          }));
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
             err.message ||
             "Failed to finish reading";
-          set({ error: errorMessage, isLoading: false });
+          set((state) => ({
+            errors: { ...state.errors, reading: errorMessage },
+            loading: { ...state.loading, reading: false },
+          }));
           console.error(`❌ Finish reading failed: ${errorMessage}`);
           throw new Error(errorMessage);
         }
       },
       deleteReadingSession: async (data: deleteReadingSessionRequest) => {
-        set({ isLoading: true, error: null });
+        set((state) => ({
+          loading: { ...state.loading, reading: true },
+          errors: { ...state.errors, reading: null },
+        }));
         try {
           await bookService.deleteReadingSession(data);
           // Re-fetch the book to update the UI
           await get().getReadingBookInfo(data.bookId);
-          set({ isLoading: false });
+          set((state) => ({
+            loading: { ...state.loading, reading: false },
+          }));
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
             err.message ||
             "Failed to delete reading session";
-          set({ error: errorMessage, isLoading: false });
+          set((state) => ({
+            errors: { ...state.errors, reading: errorMessage },
+            loading: { ...state.loading, reading: false },
+          }));
           console.error(`❌ Delete reading session failed: ${errorMessage}`);
           throw new Error(errorMessage);
         }

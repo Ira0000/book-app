@@ -24,8 +24,36 @@ export const AddBookSchema = yup.object().shape({
     .required("Number of pages is required"),
 });
 
+export const startReadingBookSchema = (totalPages?: number) =>
+  yup.object().shape({
+    page: yup
+      .number()
+      .typeError("Page must be a number")
+      .integer("Page must be a whole number")
+      .min(1, "The page must be at least 1")
+      .required("Number of the page is required")
+      .test(
+        "max-page",
+        `Page cannot be greater than (${totalPages})`,
+        (page) => {
+          if (totalPages === undefined || page === undefined || page === null) {
+            return true;
+          }
+          return page <= totalPages;
+        }
+      ),
+  });
+
+export const fixedStartReadingBookSchema = yup.object().shape({
+  page: yup.number().required(),
+});
+
 export type FilterRecommendedFormData = yup.InferType<
   typeof filterRecommendedBookSchema
 >;
 
 export type AddBookFormData = yup.InferType<typeof AddBookSchema>;
+
+export type StartReadingBookFormData = yup.InferType<
+  typeof fixedStartReadingBookSchema
+>;

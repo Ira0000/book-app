@@ -15,7 +15,8 @@ const statusMapping: Record<string, BookStatus | ""> = {
 };
 
 export default function LibraryPage() {
-  const { userLibrary, fetchUserLibrary, isLoading, error } = useBookStore();
+  const { userLibrary, fetchUserLibrary, loading, errors, clearError } =
+    useBookStore();
   const [selectedStatus, setSelectedStatus] = useState<BookStatus | string>(
     status[0]
   );
@@ -27,7 +28,13 @@ export default function LibraryPage() {
 
   const handleSelect = (value: string) => {
     setSelectedStatus(value);
+    if (libraryError) {
+      clearError("userLibrary");
+    }
   };
+
+  const isLibraryLoading = loading.userLibrary;
+  const libraryError = errors.userLibrary;
 
   return (
     <div className="relative pt-[20px] pb-[40px]">
@@ -41,8 +48,8 @@ export default function LibraryPage() {
       </div>
       {userLibrary.length > 0 ? (
         <EmblaCarousel
-          error={error}
-          isLoading={isLoading}
+          error={libraryError}
+          isLoading={isLibraryLoading}
           slides={userLibrary}
           isLibraryPage={true}
         />

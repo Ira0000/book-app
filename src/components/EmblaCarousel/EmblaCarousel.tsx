@@ -72,7 +72,7 @@ export default function EmblaCarousel({
     deleteBookFromLibrary(id);
   };
 
-  const arrowButtonClass = isLibraryPage && "bottom-0";
+  const arrowButtonClass = isLibraryPage ? "bottom-0" : "top-0";
 
   if (isLoading) {
     return <Loader />;
