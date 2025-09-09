@@ -12,8 +12,6 @@ import {
 } from "@/types/BookTypes";
 import { persist } from "zustand/middleware";
 import { bookService } from "@/services/bookServices";
-// import { LoadingStates } from "./loadingUtils";
-// import { ErrorStates } from "./errorUtils";
 
 export interface LoadingStates {
   recommendations: boolean;
@@ -57,6 +55,7 @@ export const useBookStore = create<BookState>()(
       recommendedBooks: [],
       userLibrary: [],
       selectedBook: null,
+      currentReading: null,
       loading: initialLoadingState,
       errors: initialErrorState,
       totalPages: 0,
@@ -74,6 +73,7 @@ export const useBookStore = create<BookState>()(
       clearAllErrors: () => {
         set({ errors: initialErrorState });
       },
+
       setSelectedBook: (book: UserBookResponse) => {
         set({
           selectedBook: book,
@@ -82,7 +82,38 @@ export const useBookStore = create<BookState>()(
             selectedBook: null,
           },
         });
+        const hasActiveReadingSession = book.progress.some(
+          (session) => !session.finishReading
+        );
+        if (hasActiveReadingSession) {
+          const activeReadingSession = book.progress.find(
+            (session) => !session.finishReading
+          );
+
+          if (activeReadingSession) {
+            set({
+              currentReading: {
+                bookId: book._id,
+                sessionId: activeReadingSession._id,
+                startPage: activeReadingSession.startPage,
+                startTime:
+                  activeReadingSession.startReading || new Date().toISOString(),
+              },
+            });
+          }
+        } else {
+          const currentReading = get().currentReading;
+          if (currentReading?.bookId === book._id) {
+            set({ currentReading: null });
+          }
+        }
         // console.log("Selected book set:", book);
+      },
+
+      isCurrentlyReading: (bookId?: string) => {
+        const currentReading = get().currentReading;
+        if (!bookId) return !!currentReading;
+        return currentReading?.bookId === bookId;
       },
 
       fetchRecommendedBooks: async (request: BookRecommendationRequest) => {
@@ -238,6 +269,7 @@ export const useBookStore = create<BookState>()(
           throw new Error(errorMessage);
         }
       },
+
       getReadingBookInfo: async (id: string) => {
         set((state) => ({
           loading: { ...state.loading, selectedBook: true },
@@ -249,7 +281,26 @@ export const useBookStore = create<BookState>()(
             selectedBook: book,
             loading: { ...state.loading, selectedBook: false },
           }));
-          // console.log("✅ Book details fetched successfully");
+
+          const hasActiveSession = book.progress.some(
+            (session) => !session.finishReading
+          );
+          if (hasActiveSession) {
+            const activeSession = book.progress.find(
+              (session) => !session.finishReading
+            );
+            if (activeSession) {
+              set({
+                currentReading: {
+                  bookId: book._id,
+                  sessionId: activeSession._id,
+                  startPage: activeSession.startPage || 0,
+                  startTime:
+                    activeSession?.startReading || new Date().toISOString(),
+                },
+              });
+            }
+          }
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
@@ -272,13 +323,17 @@ export const useBookStore = create<BookState>()(
         }));
         try {
           await bookService.startReadingBook({ id, page });
-          // Optional: Re-fetch the book details or user library to update the state
+          set({
+            currentReading: {
+              bookId: id,
+              startPage: page,
+              startTime: new Date().toISOString(),
+            },
+            loading: { ...get().loading, reading: false },
+          });
+
           await get().getReadingBookInfo(id);
           await get().fetchUserLibrary();
-          set((state) => ({
-            loading: { ...state.loading, reading: false },
-          }));
-          console.log("✅ Reading session started successfully");
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
@@ -299,12 +354,13 @@ export const useBookStore = create<BookState>()(
         }));
         try {
           await bookService.finishReadingBook({ id, page });
-          // Re-fetch the book and library to update the UI
+
+          set({
+            currentReading: null,
+            loading: { ...get().loading, reading: false },
+          });
           await get().getReadingBookInfo(id);
           await get().fetchUserLibrary();
-          set((state) => ({
-            loading: { ...state.loading, reading: false },
-          }));
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
@@ -318,6 +374,7 @@ export const useBookStore = create<BookState>()(
           throw new Error(errorMessage);
         }
       },
+
       deleteReadingSession: async (data: deleteReadingSessionRequest) => {
         set((state) => ({
           loading: { ...state.loading, reading: true },
@@ -325,7 +382,14 @@ export const useBookStore = create<BookState>()(
         }));
         try {
           await bookService.deleteReadingSession(data);
-          // Re-fetch the book to update the UI
+
+          const currentReading = get().currentReading;
+          if (
+            currentReading?.sessionId === data.readingId ||
+            currentReading?.bookId === data.bookId
+          ) {
+            set({ currentReading: null });
+          }
           await get().getReadingBookInfo(data.bookId);
           set((state) => ({
             loading: { ...state.loading, reading: false },
@@ -351,6 +415,7 @@ export const useBookStore = create<BookState>()(
         recommendedBooks: state.recommendedBooks,
         totalPages: state.totalPages,
         currentPage: state.currentPage,
+        currentReading: state.currentReading,
       }),
     }
   )

@@ -1,11 +1,15 @@
 "use client";
 
-import { UserBookResponse } from "@/types/BookTypes";
+import {
+  deleteReadingSessionRequest,
+  UserBookResponse,
+} from "@/types/BookTypes";
 import { useState } from "react";
 import Icon from "../Ui/Icon";
 import { cn } from "@/lib/cn";
 import Diary from "./Diary";
 import Statistics from "./Statistics";
+import { useBookStore } from "@/store/bookStore";
 
 type DetailsPropsType = {
   bookDetails: UserBookResponse;
@@ -14,9 +18,9 @@ type DetailsPropsType = {
 export default function Details({ bookDetails }: DetailsPropsType) {
   const [switchDetails, setSwitchDetails] = useState(true);
 
-  console.log(bookDetails);
-
   const sectionName = switchDetails ? "Diary" : "Statistics";
+
+  const { deleteReadingSession } = useBookStore();
 
   const onDiaryClick = () => {
     setSwitchDetails(true);
@@ -24,6 +28,14 @@ export default function Details({ bookDetails }: DetailsPropsType) {
 
   const onStatisticsClick = () => {
     setSwitchDetails(false);
+  };
+
+  const onDeleteSessionClick = async (readingId: string, bookId: string) => {
+    const requestData: deleteReadingSessionRequest = {
+      readingId: readingId,
+      bookId: bookId,
+    };
+    await deleteReadingSession(requestData);
   };
 
   if (bookDetails.progress.length < 1) {
@@ -78,7 +90,14 @@ export default function Details({ bookDetails }: DetailsPropsType) {
           </button>
         </div>
       </div>
-      {switchDetails ? <Diary bookDetails={bookDetails} /> : <Statistics />}
+      {switchDetails ? (
+        <Diary
+          bookDetails={bookDetails}
+          onDeleteSessionClick={onDeleteSessionClick}
+        />
+      ) : (
+        <Statistics />
+      )}
     </div>
   );
 }

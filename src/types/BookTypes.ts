@@ -2,6 +2,7 @@ export interface BookState {
   recommendedBooks: Book[];
   userLibrary: UserBookResponse[];
   selectedBook: UserBookResponse | null;
+  currentReading: CurrentReadingStatus | null;
   loading: LoadingStates;
   errors: ErrorStates;
   totalPages: number;
@@ -9,6 +10,7 @@ export interface BookState {
   clearError: (errorType: keyof ErrorStates) => void;
   clearAllErrors: () => void;
   setSelectedBook: (book: UserBookResponse) => void;
+  isCurrentlyReading: (id: string) => void;
   fetchRecommendedBooks: (request: BookRecommendationRequest) => Promise<void>;
   fetchUserLibrary: (request?: BookStatus) => Promise<void>;
   addBookToLibrary: (request: AddBookRequest) => Promise<void>;
@@ -111,4 +113,11 @@ export interface UserBookResponse {
 export interface deleteReadingSessionRequest {
   bookId: string;
   readingId: string;
+}
+
+export interface CurrentReadingStatus {
+  bookId: string;
+  sessionId?: string;
+  startPage: number;
+  startTime: string;
 }

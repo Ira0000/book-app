@@ -11,7 +11,6 @@ import AddBook from "./AddBook";
 import { useModal } from "../Providers/ModalProvider";
 import Details from "./Details";
 import ReadingStartForm from "../Forms/ReadingStartForm";
-import { useState } from "react";
 
 export default function Dashboard() {
   const {
@@ -22,13 +21,13 @@ export default function Dashboard() {
     startReading,
     selectedBook,
     finishReading,
+    isCurrentlyReading,
   } = useBookStore();
   const pathname = usePathname();
 
   const { openModal } = useModal();
 
-  const [isReading, setIsReading] = useState(false);
-  // console.log(selectedBook);
+  const isReading = selectedBook && isCurrentlyReading(selectedBook._id);
 
   const onFilterSubmit = async (data: FilterRecommendedFormData) => {
     const requestData: BookRecommendationRequest = {
@@ -66,7 +65,7 @@ export default function Dashboard() {
 
       await startReading(requestData);
 
-      setIsReading(true);
+      // setIsReading(true);
       console.log("✅ Reading session started successfully:", requestData);
     } catch (error) {
       console.error("❌ Failed to start reading:", error);
@@ -87,7 +86,7 @@ export default function Dashboard() {
         page: page,
       };
       await finishReading(requestData);
-      setIsReading(false);
+      // setIsReading(false);
       console.log("✅ Reading session finished successfully:", requestData);
     } catch (error) {
       console.error("❌ Failed to finish reading:", error);
