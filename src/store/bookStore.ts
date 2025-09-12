@@ -416,6 +416,7 @@ export const useBookStore = create<BookState>()(
         totalPages: state.totalPages,
         currentPage: state.currentPage,
         currentReading: state.currentReading,
+        selectedBook: state.selectedBook,
       }),
     }
   )

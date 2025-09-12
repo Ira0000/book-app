@@ -86,7 +86,6 @@ export default function Dashboard() {
         page: page,
       };
       await finishReading(requestData);
-      // setIsReading(false);
       console.log("✅ Reading session finished successfully:", requestData);
     } catch (error) {
       console.error("❌ Failed to finish reading:", error);

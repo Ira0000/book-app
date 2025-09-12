@@ -77,7 +77,7 @@ export default function Diary({
                 </div>
               </div>
               <button
-                className="flex items-center justify-center size-[14px] group"
+                className="cursor-pointer flex items-center justify-center size-[14px] group"
                 type="button"
                 onClick={() => onDeleteSessionClick(item._id, bookDetails._id)}
               >

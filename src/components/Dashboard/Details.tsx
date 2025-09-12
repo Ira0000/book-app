@@ -38,7 +38,10 @@ export default function Details({ bookDetails }: DetailsPropsType) {
     await deleteReadingSession(requestData);
   };
 
-  if (bookDetails.progress.length < 1) {
+  if (
+    bookDetails.progress.length < 1 ||
+    !bookDetails.progress[0].finishReading
+  ) {
     return (
       <div className="w-full">
         <h2 className="text-large text-[18px] text-milk-white mb-[14px]">
@@ -62,7 +65,7 @@ export default function Details({ bookDetails }: DetailsPropsType) {
         <div className="flex gap-2">
           <button
             onClick={onDiaryClick}
-            className="flex items-center justify-center"
+            className="flex items-center justify-center cursor-pointer"
           >
             <Icon
               id="icon-hourglass-02"
@@ -76,7 +79,7 @@ export default function Details({ bookDetails }: DetailsPropsType) {
           </button>
           <button
             onClick={onStatisticsClick}
-            className="flex items-center justify-center"
+            className="flex items-center justify-center cursor-pointer"
           >
             <Icon
               id="icon-pie-chart-03"
@@ -96,7 +99,7 @@ export default function Details({ bookDetails }: DetailsPropsType) {
           onDeleteSessionClick={onDeleteSessionClick}
         />
       ) : (
-        <Statistics />
+        <Statistics bookDetails={bookDetails} />
       )}
     </div>
   );

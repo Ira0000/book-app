@@ -3,6 +3,7 @@
 import Icon from "@/components/Ui/Icon";
 import React from "react";
 import { useModal } from "../Providers/ModalProvider";
+import Link from "next/link";
 
 export default function NavigationBar() {
   const userName = "I";
@@ -11,7 +12,9 @@ export default function NavigationBar() {
 
   return (
     <div className="flex w-full justify-between items-center bg-grey-dark rounded-2xl px-[20px] py-[11px]">
-      <Icon id="icon-icon" w={42} h={17} className="fill-white" />
+      <Link href={"/recommended"}>
+        <Icon id="icon-icon" w={42} h={17} className="fill-white" />
+      </Link>{" "}
       <div className="flex gap-[10px]">
         <button className="flex justify-center items-center rounded-full size-[35px] border border-[#F9F9F933]">
           {userName}
