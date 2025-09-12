@@ -1,7 +1,6 @@
 import {
   AddBookRequest,
   BookRecommendationResponse,
-  BookStatus,
   DeleteBookResponse,
   deleteReadingSessionRequest,
   ReadingBookRequest,
