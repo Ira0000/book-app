@@ -9,7 +9,6 @@ export default function RecommendedPage() {
   const { recommendedBooks, fetchRecommendedBooks, loading, errors } =
     useBookStore();
   useEffect(() => {
-    // Initial fetch on component mount without any filter
     const initialRequest: BookRecommendationRequest = {
       page: 1,
       limit: 10,

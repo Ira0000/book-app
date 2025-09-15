@@ -49,6 +49,15 @@ const initialErrorState: ErrorStates = {
   reading: null,
 };
 
+const IS_TESTING = true;
+
+const conditionalLog = (message: string, isError = false) => {
+  if (IS_TESTING) {
+    if (isError) console.error(message);
+    else console.log(message);
+  }
+};
+
 export const useBookStore = create<BookState>()(
   persist(
     (set, get) => ({
@@ -107,7 +116,7 @@ export const useBookStore = create<BookState>()(
             set({ currentReading: null });
           }
         }
-        // console.log("Selected book set:", book);
+        conditionalLog(`Selected book set:", ${book}`, false);
       },
 
       isCurrentlyReading: (bookId?: string) => {
@@ -129,7 +138,7 @@ export const useBookStore = create<BookState>()(
             currentPage: response.page,
             loading: { ...state.loading, recommendations: false },
           }));
-          // console.log("✅ Recommended books fetched successfully");
+          conditionalLog("✅ Recommended books fetched successfully");
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
@@ -140,7 +149,7 @@ export const useBookStore = create<BookState>()(
             loading: { ...state.loading, recommendations: false },
             recommendedBooks: [],
           }));
-          console.error(`❌ Fetch failed: ${errorMessage}`);
+          conditionalLog(`❌ Fetch failed: ${errorMessage}`, true);
           throw new Error(errorMessage);
         }
       },
@@ -157,7 +166,7 @@ export const useBookStore = create<BookState>()(
             userLibrary: books,
             loading: { ...state.loading, userLibrary: false },
           }));
-          // console.log("✅ User library fetched successfully");
+          conditionalLog("✅ User library fetched successfully");
         } catch (err: any) {
           const errorMessage =
             err.response?.data?.message ||
@@ -168,7 +177,7 @@ export const useBookStore = create<BookState>()(
             loading: { ...state.loading, userLibrary: false },
             userLibrary: [],
           }));
-          console.error(`❌ Fetch failed: ${errorMessage}`);
+          conditionalLog(`❌ Fetch failed: ${errorMessage}`, true);
           throw new Error(errorMessage);
         }
       },
@@ -192,7 +201,7 @@ export const useBookStore = create<BookState>()(
             errors: { ...state.errors, addBook: errorMessage },
             loading: { ...state.loading, addBook: false },
           }));
-          console.error(`❌ Add book failed: ${errorMessage}`);
+          conditionalLog(`❌ Add book failed: ${errorMessage}`, true);
           throw new Error(errorMessage);
         }
       },
@@ -220,7 +229,7 @@ export const useBookStore = create<BookState>()(
               errors: { ...state.errors, addBook: errorMessage },
               loading: { ...state.loading, addBook: false },
             }));
-            console.error(`❌ Add book failed: ${errorMessage}`);
+            conditionalLog(`❌ Add book failed: ${errorMessage}`, true);
             throw new Error(errorMessage);
           }
           const newBook = await bookService.addBookToLibraryById(book._id);
@@ -240,7 +249,7 @@ export const useBookStore = create<BookState>()(
             errors: { ...state.errors, addBook: errorMessage },
             loading: { ...state.loading, addBook: false },
           }));
-          console.error(`❌ Add book failed: ${errorMessage}`);
+          conditionalLog(`❌ Add book failed: ${errorMessage}`, true);
           throw new Error(errorMessage);
         }
       },
@@ -265,7 +274,7 @@ export const useBookStore = create<BookState>()(
             errors: { ...state.errors, deleteBook: errorMessage },
             loading: { ...state.loading, deleteBook: false },
           }));
-          console.error(`❌ Delete book failed: ${errorMessage}`);
+          conditionalLog(`❌ Delete book failed: ${errorMessage}`, true);
           throw new Error(errorMessage);
         }
       },
@@ -311,7 +320,7 @@ export const useBookStore = create<BookState>()(
             loading: { ...state.loading, selectedBook: false },
             selectedBook: null,
           }));
-          console.error(`❌ Fetch book details failed: ${errorMessage}`);
+          conditionalLog(`❌ Fetch book details failed: ${errorMessage}`, true);
           throw new Error(errorMessage);
         }
       },
@@ -343,7 +352,7 @@ export const useBookStore = create<BookState>()(
             errors: { ...state.errors, reading: errorMessage },
             loading: { ...state.loading, reading: false },
           }));
-          console.error(`❌ Start reading failed: ${errorMessage}`);
+          conditionalLog(`❌ Start reading failed: ${errorMessage}`, true);
           throw new Error(errorMessage);
         }
       },
@@ -370,7 +379,7 @@ export const useBookStore = create<BookState>()(
             errors: { ...state.errors, reading: errorMessage },
             loading: { ...state.loading, reading: false },
           }));
-          console.error(`❌ Finish reading failed: ${errorMessage}`);
+          conditionalLog(`❌ Finish reading failed: ${errorMessage}`, true);
           throw new Error(errorMessage);
         }
       },
@@ -403,7 +412,10 @@ export const useBookStore = create<BookState>()(
             errors: { ...state.errors, reading: errorMessage },
             loading: { ...state.loading, reading: false },
           }));
-          console.error(`❌ Delete reading session failed: ${errorMessage}`);
+          conditionalLog(
+            `❌ Delete reading session failed: ${errorMessage}`,
+            true
+          );
           throw new Error(errorMessage);
         }
       },

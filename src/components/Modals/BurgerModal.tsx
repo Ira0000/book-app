@@ -6,6 +6,7 @@ import { cn } from "@/lib/cn";
 import Icon from "@/components/Ui/Icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function BurgerModal() {
   const { closeModal } = useModal();
@@ -13,8 +14,10 @@ export default function BurgerModal() {
   const pathname = usePathname();
 
   const handleLogout = () => {
-    console.log("Signing out...");
-    signOut();
+    if (signOut) {
+      signOut();
+      toast.success("Signed out!");
+    }
     closeModal("burger");
   };
 

@@ -7,8 +7,6 @@ import Icon from "../Ui/Icon";
 import BookCard from "../BookCard";
 import { useBookStore } from "@/store/bookStore";
 
-// import { useEffect } from "react";
-
 type AddToLibraryModalProps = {
   book?: Book | null;
 };
@@ -21,7 +19,6 @@ export default function AddToLibraryModal({ book }: AddToLibraryModalProps) {
   const handleAddToLibrary = async (book: Book) => {
     try {
       await addBookToLibraryById(book);
-      // console.log(id);
 
       closeModal("addToLibrary");
       openModal("addedToLibrary");
@@ -39,24 +36,16 @@ export default function AddToLibraryModal({ book }: AddToLibraryModalProps) {
         errorMessage = error.message;
       }
 
-      // ✅ Pass an object with a 'message' property
       openModal("error", { message: errorMessage });
     }
 
     closeModal("addToLibrary");
   };
 
-  // useEffect(() => {
-  //   console.log("Updated user library:", userLibrary);
-  // }, [userLibrary]);
-
   if (!book) {
     return <div>No book data available.</div>;
   }
 
-  // if (book) {
-  //   console.log(book._id);
-  // }
   return (
     <div className="relative flex p-10 flex-col size-full items-center gap-[20px] text-milk-white">
       <button

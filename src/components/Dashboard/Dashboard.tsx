@@ -11,6 +11,7 @@ import AddBook from "./AddBook";
 import { useModal } from "../Providers/ModalProvider";
 import Details from "./Details";
 import ReadingStartForm from "../Forms/ReadingStartForm";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const {
@@ -45,16 +46,19 @@ export default function Dashboard() {
       author: data.author,
       totalPages: data.totalPages,
     };
-    addBookToLibrary(requestData);
-    openModal("addedToLibrary");
-    // console.log(requestData);
+
+    try {
+      await addBookToLibrary(requestData);
+      openModal("addedToLibrary");
+    } catch (error) {
+      toast.error(`Something went wrong, try again later! ${error}`);
+    }
   };
 
   const onStartReadingSubmit = async ({ page }: { page: number }) => {
     const bookId = selectedBook?._id;
     if (!bookId) {
-      // Handle the case where no book is selected
-      console.error("No book is currently selected to start reading.");
+      toast.error("No book is currently selected to start reading.");
       return;
     }
     try {
@@ -65,10 +69,9 @@ export default function Dashboard() {
 
       await startReading(requestData);
 
-      // setIsReading(true);
-      console.log("✅ Reading session started successfully:", requestData);
+      toast.success("Reading session started successfully!");
     } catch (error) {
-      console.error("❌ Failed to start reading:", error);
+      toast.error(`Failed to start reading: ${error}`);
     }
   };
 
@@ -76,7 +79,7 @@ export default function Dashboard() {
     const bookId = selectedBook?._id;
 
     if (!bookId) {
-      console.error("No book is currently selected to stop reading.");
+      toast.error("No book is currently selected to stop reading.");
       return;
     }
 
@@ -86,9 +89,9 @@ export default function Dashboard() {
         page: page,
       };
       await finishReading(requestData);
-      console.log("✅ Reading session finished successfully:", requestData);
+      toast.success("Reading session finished successfully");
     } catch (error) {
-      console.error("❌ Failed to finish reading:", error);
+      toast.error(`Failed to finish reading: ${error}`);
     }
   };
 

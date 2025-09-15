@@ -27,7 +27,6 @@ export default function FormInput({
   ...inputProps
 }: FormInputProps) {
   const {
-    // fieldState: { isTouched },
     formState: { errors, isSubmitted },
     field,
   } = useController({ control, name });
@@ -36,7 +35,6 @@ export default function FormInput({
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const hasValidationBorder = validationVisible && !isFocused && isSubmitted;
-  //   const hasValidationBorder = validationVisible && !isFocused && isTouched;
 
   return (
     <div className="flex flex-col relative">

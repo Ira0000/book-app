@@ -22,7 +22,6 @@ export const bookService = {
         });
       return response.data;
     } catch (error) {
-      // Re-throw the error to be handled by the calling component or store
       throw error;
     }
   },

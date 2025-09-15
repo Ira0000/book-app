@@ -20,14 +20,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const init = async () => {
       if (isMounted && !isInitialized) {
-        try {
-          await authStore.initializeAuth();
-        } catch (err) {
-          console.error("❌ Auth initialization failed:", err);
-        } finally {
-          if (isMounted) {
-            setIsInitialized(true);
-          }
+        await authStore.initializeAuth();
+        if (isMounted) {
+          setIsInitialized(true);
         }
       }
     };
@@ -40,12 +35,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    // Only run this after the initial check is complete
     if (isInitialized && !authStore.isAuthenticated) {
       const currentPath = window.location.pathname;
       const isGuestRoute = ["/login", "/register"].includes(currentPath);
 
-      // Redirect to login if on a protected route and not authenticated
       if (!isGuestRoute) {
         router.push(`/login?redirect=${currentPath}`);
       }
@@ -53,13 +46,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [authStore.isAuthenticated, isInitialized, router]);
 
   const enhancedSignOut = async () => {
-    try {
-      await authStore.signOut();
-    } catch (err) {
-      console.error("⚠️ Sign out error:", err);
-    } finally {
-      router.push("/login");
-    }
+    await authStore.signOut();
+    router.push("/login");
   };
 
   if (!isInitialized) {

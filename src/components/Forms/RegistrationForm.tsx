@@ -9,6 +9,7 @@ import FormInput from "@/components/Ui/FormInput";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function RegistrationForm() {
   const { control, handleSubmit } = useForm<RegisterFormData>({
@@ -26,20 +27,18 @@ export default function RegistrationForm() {
   const router = useRouter();
   const onSubmit = async (data: RegisterFormData) => {
     if (!signUp) {
-      console.error("Authentication store is not ready yet.");
+      toast.error("Authentication store is not ready yet.");
       return;
     }
 
     try {
       await signUp(data);
-      console.log("Registration successful!");
+      toast.success("Registration successful!");
       router.push("/");
     } catch (err: any) {
-      console.error("Registration failed:", err.message);
+      toast.error("Registration failed:", err.message);
     }
   };
-
-  // useGuestOnly();
 
   return (
     <form

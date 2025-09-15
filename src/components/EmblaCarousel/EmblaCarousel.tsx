@@ -11,6 +11,7 @@ import { Media, MediaContextProvider } from "@/helpers/Media";
 import { useModal } from "../Providers/ModalProvider";
 import { useBookStore } from "@/store/bookStore";
 import Loader from "../Ui/Loader";
+import { toast } from "react-toastify";
 
 type EmblaCarouselPropsType = {
   slides: Book[] | UserBookResponse[];
@@ -57,7 +58,6 @@ export default function EmblaCarousel({
   const groupedSlides = [];
   for (let i = 0; i < slides.length; i += 2) {
     groupedSlides.push(slides.slice(i, i + 2));
-    // console.log(groupedSlides);
   }
 
   const handleOnCoverClick = (slide: Book | UserBookResponse) => {
@@ -83,7 +83,7 @@ export default function EmblaCarousel({
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    toast.error(`Something went wrong: ${error}`);
   }
 
   return (

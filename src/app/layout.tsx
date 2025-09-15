@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/components/Providers/AuthProvider";
 import { ModalProvider } from "@/components/Providers/ModalProvider";
 import ModalManager from "@/components/Modals/ModalsManager";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Book App",
@@ -20,6 +21,19 @@ export default function RootLayout({
       <body className="p-5 md:p-8">
         <AuthProvider>
           <ModalProvider>
+            <ToastContainer
+              position="top-right"
+              autoClose={4000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick={true}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+              // style={}
+            />
             {children}
             <ModalManager />
           </ModalProvider>

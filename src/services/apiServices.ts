@@ -12,6 +12,22 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://readjourney.b.goit.study/api";
 const IS_TESTING = true;
 
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: { "Content-Type": "application/json" },
+});
+
+// Separate client for auth operations (no interceptors)
+const authClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: { "Content-Type": "application/json" },
+});
+
+// Create a separate, un-intercepted instance for the refresh token call
+const refreshClient = axios.create({
+  baseURL: API_BASE_URL,
+});
+
 // Create a token manager to avoid circular dependencies
 class TokenManager {
   private token: string | null = null;
@@ -62,16 +78,6 @@ class TokenManager {
 }
 
 const tokenManager = new TokenManager();
-
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: { "Content-Type": "application/json" },
-});
-
-// Create a separate, un-intercepted instance for the refresh token call
-const refreshClient = axios.create({
-  baseURL: API_BASE_URL,
-});
 
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -148,7 +154,7 @@ apiClient.interceptors.response.use(
 export const authService = {
   async signUp(data: SignUpRequest): Promise<AuthResponse> {
     try {
-      const response: AxiosResponse<AuthResponse> = await apiClient.post(
+      const response: AxiosResponse<AuthResponse> = await authClient.post(
         "/users/signup",
         data
       );
@@ -160,7 +166,7 @@ export const authService = {
 
   async signIn(data: SignInRequest): Promise<AuthResponse> {
     try {
-      const response: AxiosResponse<AuthResponse> = await apiClient.post(
+      const response: AxiosResponse<AuthResponse> = await authClient.post(
         "/users/signin",
         data
       );

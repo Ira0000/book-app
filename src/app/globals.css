@@ -4,6 +4,9 @@
   --background: #ffffff;
   --foreground: #171717;
   --font-gilroy: Gilroy, sans-serif;
+  --toastify-color-dark: #686868;
+  --toastify-color-success: #30b94d;
+  --toastify-color-error: #e90516;
 }
 
 @theme inline {

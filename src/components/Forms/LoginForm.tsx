@@ -9,6 +9,7 @@ import FormInput from "@/components/Ui/FormInput";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function LoginForm() {
   const { control, handleSubmit } = useForm<LoginFormData>({
@@ -25,16 +26,16 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     if (!signIn) {
-      console.error("Authentication store is not ready yet.");
+      toast.error("Authentication store is not ready yet.");
       return;
     }
 
     try {
       await signIn(data);
-      console.log("Login successful!");
+      toast.success("Login successful!");
       router.push("/");
     } catch (err: any) {
-      console.error("Login failed:", err.message);
+      toast.error(`Login failed: ${err.message}`);
     }
   };
 
