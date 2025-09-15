@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useBookStore } from "@/store/bookStore";
 
 type StartReadingModalProps = {
-  book?: UserBookResponse | null;
+  book: UserBookResponse;
 };
 
 export default function StartReadingModal({ book }: StartReadingModalProps) {
@@ -21,10 +21,6 @@ export default function StartReadingModal({ book }: StartReadingModalProps) {
     closeModal("startReading");
     router.push(`/reading`);
   };
-
-  if (!book) {
-    return <div>No book data available.</div>;
-  }
 
   return (
     <div className="relative flex p-10 flex-col size-full items-center gap-[20px] text-milk-white">

@@ -8,7 +8,7 @@ import BookCard from "../BookCard";
 import { useBookStore } from "@/store/bookStore";
 
 type AddToLibraryModalProps = {
-  book?: Book | null;
+  book: Book;
 };
 
 export default function AddToLibraryModal({ book }: AddToLibraryModalProps) {
@@ -35,16 +35,10 @@ export default function AddToLibraryModal({ book }: AddToLibraryModalProps) {
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
-
+      closeModal("addToLibrary");
       openModal("error", { message: errorMessage });
     }
-
-    closeModal("addToLibrary");
   };
-
-  if (!book) {
-    return <div>No book data available.</div>;
-  }
 
   return (
     <div className="relative flex p-10 flex-col size-full items-center gap-[20px] text-milk-white">

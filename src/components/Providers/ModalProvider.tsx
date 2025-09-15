@@ -38,6 +38,8 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [modals, setModals] = useState<ModalState>({});
   const [modalData, setModalData] = useState<ModalDataContext>({});
 
+  const MODAL_ANIMATION_DURATION = 500;
+
   const openModal = (name: string, data: ModalData = null) => {
     setModals((prev) => ({ ...prev, [name]: true }));
     setModalData((prev) => ({ ...prev, [name]: data }));
@@ -45,7 +47,9 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 
   const closeModal = (name: string) => {
     setModals((prev) => ({ ...prev, [name]: false }));
-    setModalData((prev) => ({ ...prev, [name]: null }));
+    setTimeout(() => {
+      setModalData((prev) => ({ ...prev, [name]: null }));
+    }, MODAL_ANIMATION_DURATION);
   };
 
   const toggleModal = (name: string, data: ModalData = null) => {

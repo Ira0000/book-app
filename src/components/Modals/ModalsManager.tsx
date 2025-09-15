@@ -84,10 +84,15 @@ export default function ModalManager() {
   const transitions = useTransition<ModalType, AnimationStyle>(
     modals.filter((modal) => isModalOpen(modal.name)),
     {
-      from: { transform: "translateX(100%)", opacity: 0 },
-      enter: { transform: "translateX(0%)", opacity: 1 },
-      leave: { transform: "translateX(100%)", opacity: 0 },
+      from: { opacity: 0, transform: "translateX(100%)" },
+      enter: { opacity: 1, transform: "translateX(0%)" },
+      leave: { opacity: 0, transform: "translateX(100%)" },
       keys: (modal) => modal.name,
+      config: {
+        duration: 500,
+        tension: 120,
+        friction: 20,
+      },
     }
   );
 
@@ -114,10 +119,10 @@ export default function ModalManager() {
                   key={modal.name}
                   className={modal.className}
                 >
-                  {modal.name === "addToLibrary" && (
+                  {modal.name === "addToLibrary" && modalData.addToLibrary && (
                     <AddToLibraryModal book={modalData.addToLibrary as Book} />
                   )}
-                  {modal.name === "startReading" && (
+                  {modal.name === "startReading" && modalData.startReading && (
                     <StartReadingModal
                       book={modalData.startReading as UserBookResponse}
                     />
@@ -153,10 +158,10 @@ export default function ModalManager() {
                   className={modal.className}
                 >
                   {modal.name === "burger" && <BurgerModal />}
-                  {modal.name === "addToLibrary" && (
+                  {modal.name === "addToLibrary" && modalData.addToLibrary && (
                     <AddToLibraryModal book={modalData.addToLibrary as Book} />
                   )}
-                  {modal.name === "startReading" && (
+                  {modal.name === "startReading" && modalData.startReading && (
                     <StartReadingModal
                       book={modalData.startReading as UserBookResponse}
                     />
