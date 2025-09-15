@@ -100,31 +100,43 @@ export default function Dashboard() {
   const isReadingPageActive = pathname === "/reading";
 
   return (
-    <div className="flex flex-col gap-[20px] bg-grey-dark rounded-[30px] p-[20px] md:p-8">
+    <div className=" bg-grey-dark rounded-[30px] p-[20px] md:p-8">
       {isHomePageActive && (
-        <>
-          <LibraryLink />
-          <FilterForm onSubmit={onFilterSubmit} />
-        </>
+        <div className="flex flex-col md:flex-row gap-[20px] md:gap-8 w-full">
+          <div className="md:order-2 md:w-[55%]">
+            <LibraryLink />
+          </div>
+          <div className="md:order-1 md:w-[45%]">
+            <FilterForm onSubmit={onFilterSubmit} />
+          </div>
+        </div>
       )}
       {isLibraryPageActive && (
-        <>
-          <AddBook onSubmit={onAddBookSubmit} />{" "}
-          <RecommendedLink
-            recommendedBooks={recommendedBooks}
-            isLoading={loading.recommendations}
-          />
-        </>
+        <div className="flex flex-col md:flex-row gap-[20px] md:gap-8 w-full">
+          <div className="md:w-[50%]">
+            <AddBook onSubmit={onAddBookSubmit} />
+          </div>
+          <div className="md:w-[50%]">
+            <RecommendedLink
+              recommendedBooks={recommendedBooks}
+              isLoading={loading.recommendations}
+            />
+          </div>
+        </div>
       )}
       {isReadingPageActive && selectedBook && (
-        <>
-          <ReadingStartForm
-            onSubmit={isReading ? onStopReadingSubmit : onStartReadingSubmit}
-            buttonText={isReading ? "To Stop" : "To Start"}
-            totalPages={selectedBook?.totalPages}
-          />
-          <Details bookDetails={selectedBook} />
-        </>
+        <div className="flex flex-col md:flex-row gap-[20px] md:gap-10 w-full">
+          <div className="md:w-[50%]">
+            <ReadingStartForm
+              onSubmit={isReading ? onStopReadingSubmit : onStartReadingSubmit}
+              buttonText={isReading ? "To Stop" : "To Start"}
+              totalPages={selectedBook?.totalPages}
+            />
+          </div>
+          <div className="md:w-[50%]">
+            <Details bookDetails={selectedBook} />
+          </div>
+        </div>
       )}
     </div>
   );

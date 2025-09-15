@@ -55,10 +55,35 @@ export default function EmblaCarousel({
 
   const { openModal } = useModal();
   const { deleteBookFromLibrary } = useBookStore();
-  const groupedSlides = [];
-  for (let i = 0; i < slides.length; i += 2) {
-    groupedSlides.push(slides.slice(i, i + 2));
+
+  function groupSlides<T>(slides: T[], maxPerGroup = 2, groups = 4): T[][] {
+    const grouped: T[][] = Array.from({ length: groups }, () => []);
+
+    slides.forEach((num, i) => {
+      if (i < groups) {
+        // Fill the initial groups (one item each)
+        grouped[i].push(num);
+      } else {
+        const targetIndex = (i - groups) % groups;
+
+        if (grouped[targetIndex].length < maxPerGroup) {
+          grouped[targetIndex].push(num);
+        } else {
+          // Once initial groups are full, start creating new groups
+          const extraIndex = i - groups * maxPerGroup;
+          const newIndex = groups + Math.floor(extraIndex / maxPerGroup);
+
+          if (!grouped[newIndex]) {
+            grouped[newIndex] = [];
+          }
+          grouped[newIndex].push(num);
+        }
+      }
+    });
+    return grouped;
   }
+
+  const groupedSlides = groupSlides(slides);
 
   const handleOnCoverClick = (slide: Book | UserBookResponse) => {
     if (isLibraryPage) {
@@ -135,11 +160,11 @@ export default function EmblaCarousel({
 
           <Media greaterThanOrEqual="md">
             <div className="overflow-hidden w-full" ref={emblaRef}>
-              <ul className="flex w-full gap-[21px] md:gap-[25px] lg:gap-[20px]">
+              <ul className="flex w-full gap-[25px] lg:gap-[20px]">
                 {groupedSlides.map((slideGroup, groupIndex) => (
                   <li
                     key={groupIndex}
-                    className={`flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-21px)/2)] md:w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)] ${carouselStyle}`}
+                    className={`flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)] ${carouselStyle}`}
                   >
                     <ul className="flex flex-col gap-[27px]">
                       {slideGroup.map((slide, slideIndexInGroup) => {

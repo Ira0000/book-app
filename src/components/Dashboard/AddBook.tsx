@@ -30,7 +30,9 @@ export default function AddBook({ onSubmit }: AddBookPropsType) {
       className="bg-transparent flex flex-col gap-5"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h2 className="text-light text-milk-white">Book details</h2>
+      <h2 className="text-light md:text-large md:font-medium text-milk-white">
+        Book details
+      </h2>
       <FormInput
         validationVisible={true}
         control={control}
@@ -55,7 +57,7 @@ export default function AddBook({ onSubmit }: AddBookPropsType) {
 
       <button
         type="submit"
-        className="cursor-pointer max-w-[110px] mt-3 py-[10px] px-[20px] bg-transparent text-large text-milk-white border rounded-[30px] border-white-transp lg:hover:border-milk-white lg:hover:bg-milk-white lg:hover:text-grey-dark transition-colors"
+        className="cursor-pointer max-w-[110px] md:max-w-[132px] md:px-7 md:py-3 mt-3 py-[10px] px-[20px] bg-transparent text-large md:text-[16px] text-milk-white border rounded-[30px] border-white-transp lg:hover:border-milk-white lg:hover:bg-milk-white lg:hover:text-grey-dark transition-colors"
       >
         Add book
       </button>

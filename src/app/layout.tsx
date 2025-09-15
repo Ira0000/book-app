@@ -32,7 +32,6 @@ export default function RootLayout({
               draggable
               pauseOnHover
               theme="dark"
-              // style={}
             />
             {children}
             <ModalManager />

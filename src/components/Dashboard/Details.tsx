@@ -44,14 +44,14 @@ export default function Details({ bookDetails }: DetailsPropsType) {
   ) {
     return (
       <div className="w-full">
-        <h2 className="text-large text-[18px] text-milk-white mb-[14px]">
+        <h2 className="text-large md:text-xl text-[18px] text-milk-white mb-[14px]">
           Progress
         </h2>
         <p className="mb-[20px] text-large font-medium text-grey-form">
           Here you will see when and how much you read. To record, click on the
           red button above.
         </p>
-        <div className="flex text-[32px] items-center justify-center  size-[80px] rounded-full bg-grey mx-auto">
+        <div className="flex text-[32px] md:text-[50px] md:size-[100px] items-center justify-center  size-[80px] rounded-full bg-grey mx-auto">
           🌟
         </div>
       </div>
@@ -61,7 +61,7 @@ export default function Details({ bookDetails }: DetailsPropsType) {
   return (
     <div className="flex flex-col gap-[20px]">
       <div className="flex justify-between">
-        <h2 className="text-large text-[18px]">{sectionName}</h2>
+        <h2 className="text-large md:text-xl text-[18px]">{sectionName}</h2>
         <div className="flex gap-2">
           <button
             onClick={onDiaryClick}
@@ -69,8 +69,8 @@ export default function Details({ bookDetails }: DetailsPropsType) {
           >
             <Icon
               id="icon-hourglass-02"
-              w={16}
-              h={16}
+              w={17}
+              h={17}
               className={cn("fill-transparent transition-colors", {
                 "stroke-milk-white": switchDetails,
                 " stroke-grey-form": !switchDetails,

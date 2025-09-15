@@ -44,33 +44,35 @@ export default function Diary({
               key={item._id}
             >
               <div className="flex justify-between w-full">
-                <div className="absolute top-0] -left-[9px] flex items-center justify-center size-4 rounded-[4px] bg-milk-white">
-                  <div className="size-2 rounded-[2px] bg-[#141414]"></div>
+                <div className="absolute top-0 -left-[9px] md:-left-[11px] flex items-center justify-center md:size-[20px] size-4 rounded-[4px] bg-milk-white">
+                  <div className="size-2 md:size-3 rounded-[2px] bg-[#141414]"></div>
                 </div>
                 <div className="flex flex-col gap-4">
-                  <h3 className="text-small font-bold text-milk-white">
+                  <h3 className="text-small md:text-large md:text-[16px] font-bold text-milk-white">
                     {formattedDate}
                   </h3>
                   <div className="flex flex-col gap-1">
-                    <p className="text-large text-milk-white font-medium">
+                    <p className="text-large md:text-xl text-milk-white font-medium">
                       {percentRead} %
                     </p>
-                    <p className="text-light text-grey-form">
+                    <p className="text-light md:text-small text-grey-form">
                       {formattedTimeRead}
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col gap-4">
-                  <p className="text-small text-grey-form">{pagesRead} pages</p>
-                  <div className="flex flex-col gap-1 max-w-[43px]">
+                  <p className="text-small md:text-large md:font-medium text-grey-form">
+                    {pagesRead} pages
+                  </p>
+                  <div className="flex flex-col gap-1 max-w-[43px] md:max-w-[59px]">
                     <div
-                      className="w-[43px] h-[18px]"
+                      className="w-[43px] md:w-[59px] md:h-[25px] h-[18px]"
                       style={{
                         background:
                           "linear-gradient(350deg, #30B94D33 calc(55% - 1px), #30b94d calc(55% - 0.5px), #30b94d calc(55% + 0.5px), transparent calc(45% + 1px))",
                       }}
                     ></div>
-                    <p className="text-light text-grey-form text-wrap w-full">
+                    <p className="text-light md:text-small text-grey-form text-wrap w-full">
                       {speed}
                     </p>
                   </div>

@@ -26,8 +26,8 @@ export default function BurgerModal() {
 
   return (
     <>
-      <ul className="size-full flex flex-col justify-between items-center">
-        <li className="lg:cursor-pointer size-7 self-end">
+      <ul className="size-full flex flex-col justify-between items-center md:flex-row">
+        <li className="lg:cursor-pointer size-7 self-end ">
           <button
             type="button"
             onClick={() => closeModal("burger")}

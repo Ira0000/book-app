@@ -34,7 +34,9 @@ export default function ReadingStartForm({
       className="bg-transparent flex flex-col gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h2 className="text-light text-milk-white">Start page:</h2>
+      <h2 className="text-light md:text-large md:font-medium text-milk-white">
+        Start page:
+      </h2>
       <FormInput
         validationVisible={true}
         control={control}
@@ -43,7 +45,7 @@ export default function ReadingStartForm({
       />
       <button
         type="submit"
-        className="cursor-pointer max-w-[100px] mt-3 py-[10px] px-[20px] bg-transparent text-large text-milk-white border rounded-[30px] border-white-transp lg:hover:border-milk-white lg:hover:bg-milk-white lg:hover:text-grey-dark transition-colors"
+        className="cursor-pointer max-w-[100px] md:max-w-[120px] md:px-7 md:py-3 mt-3 py-[10px] px-[20px] bg-transparent text-large md:text-[16px] text-milk-white border rounded-[30px] border-white-transp lg:hover:border-milk-white lg:hover:bg-milk-white lg:hover:text-grey-dark transition-colors"
       >
         {buttonText}
       </button>

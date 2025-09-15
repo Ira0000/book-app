@@ -50,8 +50,8 @@ export default function FormInput({
           }
         }}
         className={cn(
-          `group items-center relative h-11 w-full rounded-[12px] bg-grey 
-            text-small pl-[10px] flex gap-[10px] transition-colors  ${className}`,
+          `group items-center relative h-11 md:h-[50px] w-full rounded-[12px] bg-grey 
+            text-small md:text-large md:font-medium pl-[10px] flex gap-[10px] transition-colors  ${className}`,
           {
             "border border-green hover:border-grey-form":
               hasValidationBorder && !errors?.[name],
@@ -65,7 +65,7 @@ export default function FormInput({
         {label && (
           <label
             htmlFor={name}
-            className="capitalize whitespace-nowrap  text-small text-grey-form "
+            className="capitalize whitespace-nowrap md:text-large text-small text-grey-form "
           >
             {label}:
           </label>
