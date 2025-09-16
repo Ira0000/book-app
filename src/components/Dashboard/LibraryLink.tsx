@@ -22,8 +22,8 @@ export default function LibraryLink() {
   };
 
   return (
-    <div className="flex flex-col gap-[20px] p-[20px] bg-grey rounded-xl">
-      <h3 className="text-large md:text-xl md:font-bold font-medium text-milk-white">
+    <div className="flex flex-col gap-[20px] p-[20px] bg-grey rounded-xl lg:gap-[26px]">
+      <h3 className="text-large md:text-xl md:font-bold font-medium text-milk-white lg:mb-[16px]">
         Start your workout
       </h3>
       <ul className="flex flex-col gap-[20px]">

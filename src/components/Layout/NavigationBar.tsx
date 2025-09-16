@@ -11,7 +11,10 @@ import { toast } from "react-toastify";
 import { cn } from "@/lib/cn";
 
 export default function NavigationBar() {
-  const userName = "I";
+  const { user } = useAuth();
+
+  const userName = user && user.name.toString();
+  const userInitials = user && user.name.slice(0, 1);
 
   const { openModal, isModalOpen, closeModal } = useModal();
   const { signOut } = useAuth();
@@ -42,9 +45,9 @@ export default function NavigationBar() {
               <Icon id="icon-icon" w={42} h={17} className="fill-white" />
             </Link>{" "}
             <div className="flex gap-[10px]">
-              <button className="flex justify-center items-center rounded-full size-[35px] border border-[#F9F9F933]">
-                {userName}
-              </button>
+              <div className="flex justify-center items-center rounded-full size-[35px] border border-[#F9F9F933]">
+                {userInitials}
+              </div>
               <button
                 onClick={() => openModal("burger")}
                 className="flex justify-center items-center"
@@ -55,23 +58,26 @@ export default function NavigationBar() {
           </Media>
           <Media greaterThanOrEqual="md" className="w-full">
             <div className="flex w-full justify-between items-center">
-              <Link href={"/recommended"}>
+              <Link href={"/recommended"} className="flex gap-1">
                 <Icon id="icon-icon" w={42} h={17} className="fill-white" />
+                <h1 className="hidden lg:block text-milk-white uppercase lg:text-large lg:text-[18px]">
+                  read journey
+                </h1>
               </Link>{" "}
               <div className="flex gap-8">
-                <Link href="/recommended" onClick={() => closeModal("burger")}>
-                  <span
-                    className={cn({
-                      "relative after:content-[''] after:w-[100%] after:absolute after:translate-y-1 after:bottom-0 after:left-0 after:h-[3px] after:bg-[#4F92F7] after:rounded-xs":
-                        isHomePageActive,
-                    })}
-                  >
-                    Home
-                  </span>
+                <Link
+                  href="/recommended"
+                  onClick={() => closeModal("burger")}
+                  className={cn("text-grey-form", {
+                    "text-milk-white relative after:content-[''] after:w-[100%] after:absolute after:translate-y-1 after:bottom-0 after:left-0 after:h-[3px] after:bg-[#4F92F7] after:rounded-xs":
+                      isHomePageActive,
+                  })}
+                >
+                  Home
                 </Link>
                 <Link
-                  className={cn({
-                    "relative after:content-[''] after:w-[100%] after:absolute after:translate-y-1 after:bottom-0 after:left-0 after:h-[3px] after:bg-[#4F92F7] after:rounded-xs":
+                  className={cn("text-grey-form", {
+                    "text-milk-white relative after:content-[''] after:w-[100%] after:absolute after:translate-y-1 after:bottom-0 after:left-0 after:h-[3px] after:bg-[#4F92F7] after:rounded-xs":
                       isLibraryPageActive,
                   })}
                   href="/library"
@@ -80,12 +86,15 @@ export default function NavigationBar() {
                   My Library
                 </Link>
               </div>
-              <div className="flex gap-4">
-                <button className="flex shrink-0 justify-center items-center rounded-full size-10 border border-[#F9F9F933]">
+              <div className="flex gap-4 lg:gap-2 items-center">
+                <div className="flex shrink-0 justify-center items-center rounded-full size-10 border border-[#F9F9F933]">
+                  {userInitials}
+                </div>
+                <div className="text-large text-[16px] hidden lg:block lg:mr-2">
                   {userName}
-                </button>
+                </div>
                 <button
-                  className="px-7 border rounded-[30px] border-milk-white/20"
+                  className="px-7 py-3 border rounded-[30px] border-milk-white/20 cursor-pointer hover:bg-milk-white hover:border-milk-white hover:text-grey-dark transition-colors"
                   type="button"
                   onClick={handleLogout}
                 >

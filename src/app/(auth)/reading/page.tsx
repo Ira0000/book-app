@@ -33,7 +33,9 @@ export default function ReadingPage() {
   return (
     <div className="flex flex-col  gap-5 py-[20px]">
       <div className="flex justify-between">
-        <h2 className="text-xl mb-5 md:text-xxl text-milk-white">My reading</h2>
+        <h2 className="text-xl mb-5 md:mb-3 md:text-xxl text-milk-white">
+          My reading
+        </h2>
         <p className="hiiden md:block text-larg text-grey-form font-medium">
           {timeLeftInMinutes !== null
             ? formatTimeLeft(timeLeftInMinutes)
@@ -41,14 +43,26 @@ export default function ReadingPage() {
         </p>
       </div>
       {selectedBook && (
-        <div className="w-full items-center flex flex-col gap-[5px]">
-          <Image
-            height={208}
-            width={137}
-            alt={`Cover of the book ${selectedBook.title} by ${selectedBook.author}`}
-            src={selectedBook?.imageUrl}
-            className="h-auto rounded-[8px] object-cover mb-[5px] md:w-[169px]"
-          />
+        <div className="w-full items-center flex flex-col gap-[5px] ">
+          {selectedBook.imageUrl ? (
+            <Image
+              height={208}
+              width={137}
+              alt={`Cover of the book ${selectedBook.title} by ${selectedBook.author}`}
+              src={selectedBook?.imageUrl}
+              className="h-auto rounded-[8px] object-cover mb-[5px] md:mb-5 md:w-[169px]"
+            />
+          ) : (
+            <div className="py-[114px] px-[25px] mb-[5px] bg-grey text-milk-white flex  text-xl items-center justify-center rounded-[8px] object-cover md:mb-5">
+              <Image
+                className=""
+                height={112}
+                width={174}
+                src={"/images/book_cover.avif"}
+                alt="picture of an open book"
+              />
+            </div>
+          )}
           <h3 className=" max-w-[137px] md:max-w-[60%] md:text-xl text-center text-large text-milk-white">
             {selectedBook.title}
           </h3>
@@ -58,11 +72,11 @@ export default function ReadingPage() {
         </div>
       )}
 
-      <div className="mx-auto flex justify-center items-center rounded-full size-10  border-2 border-milk-white">
+      <div className="mx-auto flex justify-center items-center rounded-full size-10 md:size-[50px]  border-2 border-milk-white">
         {isReading ? (
-          <div className="bg-red size-[15px] rounded-[3px]"></div>
+          <div className="bg-red size-[15px] md:size-[20px] rounded-[3px]"></div>
         ) : (
-          <div className="rounded-full  size-[30px] bg-red"></div>
+          <div className="rounded-full  size-[30px] md:size-10 bg-red"></div>
         )}
       </div>
     </div>

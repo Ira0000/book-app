@@ -100,13 +100,20 @@ export default function Dashboard() {
   const isReadingPageActive = pathname === "/reading";
 
   return (
-    <div className=" bg-grey-dark rounded-[30px] p-[20px] md:p-8">
+    <div className=" bg-grey-dark rounded-[30px] p-[20px] md:p-8 lg:w-[30%] lg:py-10">
       {isHomePageActive && (
-        <div className="flex flex-col md:flex-row gap-[20px] md:gap-8 w-full">
-          <div className="md:order-2 md:w-[55%]">
+        <div className="flex flex-col md:flex-row gap-[20px] md:gap-8 size-full lg:flex-col lg:justify-between">
+          <div className="md:order-2 md:w-[55%] lg:w-full flex flex-col lg:gap-[20px]">
             <LibraryLink />
+            <div className="bg-grey  rounded-[12px] px-5 py-[15px] hidden lg:flex items-center justify-center gap-[14px]">
+              <p className="text-[40px]">&#128218;</p>
+              <p className="text-grey-form text-large font-medium">
+                &#34;Books are <span className="text-milk-white">windows</span>{" "}
+                to the world, and reading is a journey into the unknown.&#34;
+              </p>
+            </div>
           </div>
-          <div className="md:order-1 md:w-[45%]">
+          <div className="md:order-1 md:w-[45%] lg:w-full">
             <FilterForm onSubmit={onFilterSubmit} />
           </div>
         </div>

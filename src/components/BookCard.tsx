@@ -47,8 +47,14 @@ export default function BookCard({
             alt={`Cover of the book: ${slide.title} by ${slide.author}`}
           />
         ) : (
-          <div className="size-full text-center p-[10px] text-milk-white flex bg-grey-form text-xl items-center justify-center rounded-[8px] object-cover">
-            {slide.title}
+          <div className="size-full p-[10px] bg-grey text-milk-white flex  text-xl items-center justify-center rounded-[8px] object-cover">
+            <Image
+              className=""
+              height={72}
+              width={111}
+              src={"/images/book_cover.avif"}
+              alt="picture of an open book"
+            />
           </div>
         )}
       </div>

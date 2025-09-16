@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="p-5 md:p-8 h-screen">
+      <body>
         <AuthProvider>
           <ModalProvider>
             <ToastContainer
