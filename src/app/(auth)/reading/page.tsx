@@ -7,23 +7,39 @@ export default function ReadingPage() {
   const { selectedBook, isCurrentlyReading } = useBookStore();
 
   const isReading = selectedBook && isCurrentlyReading(selectedBook._id);
+  console.log(selectedBook);
 
-  const timeLeftToRead =
-    selectedBook?.timeLeftToRead &&
-    selectedBook.timeLeftToRead.hours === 0 &&
-    selectedBook.timeLeftToRead.minutes === 0
-      ? "Book read"
-      : selectedBook?.timeLeftToRead
-      ? `${selectedBook.timeLeftToRead.hours} hours and ${selectedBook.timeLeftToRead.minutes} minutes left`
-      : "Start reading to see progress";
+  const timeLeftToRead = (() => {
+    const time = selectedBook?.timeLeftToRead;
+    const status = selectedBook?.status;
+    // const { hours, minutes } = time;
+
+    if (!time && status !== "done") {
+      return "Start reading to see progress";
+    }
+
+    if (
+      !time ||
+      status === "done" ||
+      (time.hours === 0 && time.minutes === 0)
+    ) {
+      return "Book read";
+    }
+
+    const parts = [];
+    if (time.hours > 0)
+      parts.push(`${time.hours} hour${time.hours > 1 ? "s" : ""}`);
+    if (time.minutes > 0)
+      parts.push(`${time.minutes} minute${time.minutes > 1 ? "s" : ""}`);
+
+    return `${parts.join(" and ")} left`;
+  })();
 
   return (
     <div className="flex flex-col  gap-5 py-[20px] md:gap-8 lg:gap-11">
-      <div className="flex justify-between">
-        <h2 className="text-xl mb-5 md:mb-3 md:text-xxl text-milk-white">
-          My reading
-        </h2>
-        <p className="hiiden md:block text-larg text-grey-form font-medium">
+      <div className="flex justify-between items-center mb-5 md:mb-3">
+        <h2 className="text-xl  md:text-xxl text-milk-white">My reading</h2>
+        <p className="hiiden md:block text-small md:text-large text-grey-form font-medium md:font-bold">
           {timeLeftToRead}
         </p>
       </div>
