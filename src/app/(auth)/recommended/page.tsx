@@ -3,23 +3,46 @@
 import EmblaCarousel from "@/components/EmblaCarousel/EmblaCarousel";
 import { useBookStore } from "@/store/bookStore";
 import { BookRecommendationRequest } from "@/types/BookTypes";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 export default function RecommendedPage() {
-  const { recommendedBooks, fetchRecommendedBooks, loading, errors } =
-    useBookStore();
+  const {
+    recommendedBooks,
+    fetchRecommendedBooks,
+    loading,
+    errors,
+    currentPage,
+    totalPages,
+  } = useBookStore();
+
   useEffect(() => {
-    const initialRequest: BookRecommendationRequest = {
-      page: 1,
-      limit: 10,
-      title: "",
-      author: "",
-    };
-    fetchRecommendedBooks(initialRequest);
-  }, [fetchRecommendedBooks]);
+    if (recommendedBooks.length === 0) {
+      const initialRequest: BookRecommendationRequest = {
+        page: 1,
+        limit: 10,
+        title: "",
+        author: "",
+      };
+      fetchRecommendedBooks(initialRequest);
+    }
+  }, [fetchRecommendedBooks, recommendedBooks.length]);
 
   const isRecommendedError = errors.recommendations;
   const isRecommendedLoading = loading.recommendations;
+
+  const handleNextPage = useCallback(() => {
+    if (currentPage < totalPages) {
+      const initialRequest: BookRecommendationRequest = {
+        page: currentPage + 1,
+        limit: 2,
+        title: "",
+        author: "",
+      };
+      fetchRecommendedBooks(initialRequest);
+    }
+  }, [fetchRecommendedBooks, currentPage, totalPages]);
+
+  const hasMorePages = currentPage < totalPages;
 
   return (
     <div className="relative">
@@ -27,6 +50,8 @@ export default function RecommendedPage() {
         Recommended
       </h2>
       <EmblaCarousel
+        hasMorePages={hasMorePages}
+        handleNextPage={handleNextPage}
         isLoading={isRecommendedLoading}
         slides={recommendedBooks}
         error={isRecommendedError}

@@ -14,6 +14,7 @@ import Loader from "../Ui/Loader";
 import { toast } from "react-toastify";
 
 type EmblaCarouselPropsType = {
+  hasMorePages?: boolean;
   slides: Book[] | UserBookResponse[];
   options?: EmblaOptionsType;
   isLibraryPage?: boolean;
@@ -21,9 +22,12 @@ type EmblaCarouselPropsType = {
   carouselStyle?: string;
   isLoading?: boolean;
   error?: any;
+  handleNextPage?: () => void;
 };
 
 export default function EmblaCarousel({
+  handleNextPage,
+  hasMorePages = false,
   isButtonsVisible = true,
   slides,
   isLibraryPage,
@@ -31,27 +35,22 @@ export default function EmblaCarousel({
   isLoading = false,
   error,
 }: EmblaCarouselPropsType) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
+  const options: EmblaOptionsType = {
     align: "start",
     loop: false,
     dragFree: false,
     skipSnaps: false,
-    breakpoints: {
-      "(max-width: 767px)": {
-        slidesToScroll: 1,
-      },
-      "(min-width: 768px)": {
-        slidesToScroll: 2,
-      },
-    },
-  });
+    slidesToScroll: 1,
+  };
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   const {
     prevBtnDisabled,
     nextBtnDisabled,
     onPrevButtonClick,
     onNextButtonClick,
-  } = usePrevNextButtons(emblaApi);
+  } = usePrevNextButtons(emblaApi, handleNextPage, hasMorePages);
 
   const { openModal } = useModal();
   const { deleteBookFromLibrary } = useBookStore();
@@ -100,11 +99,11 @@ export default function EmblaCarousel({
 
   const arrowButtonClass = isLibraryPage ? "bottom-0" : "top-0";
 
-  if (isLoading) {
+  if (isLoading && slides.length === 0) {
     return <Loader />;
   }
 
-  if (slides.length < 1) {
+  if (slides.length === 0 && !isLoading) {
     return <div>No books found</div>;
   }
 

@@ -25,14 +25,21 @@ export default function RegistrationForm() {
   const [showPassword, setShowPassword] = useState(false);
   const { signUp } = useAuth();
   const router = useRouter();
+
   const onSubmit = async (data: RegisterFormData) => {
+    const requestData: RegisterFormData = {
+      name: data.name,
+      email: data.email.toLowerCase(),
+      password: data.password,
+    };
+
     if (!signUp) {
       toast.error("Authentication store is not ready yet.");
       return;
     }
 
     try {
-      await signUp(data);
+      await signUp(requestData);
       toast.success("Registration successful!");
       router.push("/");
     } catch (err: any) {
@@ -76,7 +83,7 @@ export default function RegistrationForm() {
       <div className="flex gap-[14px] md:gap-[20px] justify-center md:justify-start">
         <button
           type="submit"
-          className="bg-milk-white  rounded-[30px] w-[140px] md:w-[166px] md:py-4 text-center md:text-xl py-3 text-grey-dark hover:bg-transparent border border-milk-white hover:border-milk-white/20 cursor-pointer hover:text-milk-white"
+          className="bg-milk-white text-large  rounded-[30px] w-[140px] md:w-[166px] md:py-4 text-center md:text-xl py-3 text-grey-dark hover:bg-transparent border border-milk-white hover:border-milk-white/20 cursor-pointer hover:text-milk-white"
         >
           Registration
         </button>

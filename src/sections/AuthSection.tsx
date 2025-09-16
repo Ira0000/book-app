@@ -5,14 +5,14 @@ import React, { PropsWithChildren } from "react";
 export default function AuthSection({ children }: PropsWithChildren) {
   return (
     <section className="flex flex-col lg:flex-row gap-[10px] h-screen p-5 md:p-8 lg:py-10 lg:px-16">
-      <div className="flex flex-col justify-between bg-grey-dark rounded-[30px] w-full p-5 md:py-10 md:px-16 h-full lg:w-[50%]">
-        <div className="mb-10 md:mb-[150px] lg:mb-[107px] flex gap-1">
+      <div className="flex flex-col gap-[20px] md:justify-between bg-grey-dark rounded-[30px] w-full p-5 md:py-10 md:px-16 h-full lg:w-[50%]">
+        <div className=" mb-[20px] md:mb-10 flex gap-1">
           <Icon id="icon-icon" w={42} h={17} className="fill-white" />
           <h1 className="hidden md:block uppercase text text-large text-[18px] items-center">
             read journey
           </h1>
         </div>
-        <h1 className="text-milk-white  text-xxl md:text-[64px] md:leading-[60px] md:max-w-[444px] lg:max-w-full">
+        <h1 className="text-milk-white  text-xxl md:text-[45px] md:leading-[40px] md:max-w-[444px] lg:max-w-full">
           Expand your mind, reading
           <span className="text-grey-light"> a book</span>
         </h1>

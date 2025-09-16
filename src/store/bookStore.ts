@@ -83,6 +83,10 @@ export const useBookStore = create<BookState>()(
         set({ errors: initialErrorState });
       },
 
+      // incrementPage: () => {
+      //   set((state) => ({ currentPage: state.currentPage + 1 }));
+      // },
+
       setSelectedBook: (book: UserBookResponse) => {
         set({
           selectedBook: book,
@@ -132,12 +136,17 @@ export const useBookStore = create<BookState>()(
         }));
         try {
           const response = await bookService.getRecommendedBooks(request);
-          set((state) => ({
-            recommendedBooks: response.results,
-            totalPages: response.totalPages,
-            currentPage: response.page,
-            loading: { ...state.loading, recommendations: false },
-          }));
+          set((state) => {
+            const isFirstPage = request.page === 1;
+            return {
+              recommendedBooks: isFirstPage
+                ? response.results
+                : [...state.recommendedBooks, ...response.results],
+              totalPages: response.totalPages,
+              currentPage: response.page,
+              loading: { ...state.loading, recommendations: false },
+            };
+          });
           conditionalLog("✅ Recommended books fetched successfully");
         } catch (err: any) {
           const errorMessage =

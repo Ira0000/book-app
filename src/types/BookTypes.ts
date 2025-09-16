@@ -9,6 +9,7 @@ export interface BookState {
   currentPage: number;
   clearError: (errorType: keyof ErrorStates) => void;
   clearAllErrors: () => void;
+  // incrementPage: () => void;
   setSelectedBook: (book: UserBookResponse) => void;
   isCurrentlyReading: (id: string) => void;
   fetchRecommendedBooks: (request: BookRecommendationRequest) => Promise<void>;
