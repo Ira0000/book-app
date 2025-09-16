@@ -10,7 +10,9 @@ export default function Statistics({ bookDetails }: StatisticsPropsType) {
 
   const pagesRead: number =
     bookDetails?.progress.reduce(
-      (total, session) => total + (session.finishPage - session.startPage),
+      (total, session) =>
+        total +
+        (session.finishPage ? session.finishPage - session.startPage : 0),
       0
     ) || 0;
 
@@ -24,7 +26,7 @@ export default function Statistics({ bookDetails }: StatisticsPropsType) {
   return (
     <div className="bg-grey rounded-[12px] gap-[20px] p-[20px] flex flex-col items-center">
       <MediaContextProvider>
-        <div className="relative flex items-center justify-center size-[116px] md:size-[138px]">
+        <div className="relative flex items-center justify-center size-[116px] md:size-[138px] lg:size-[168px]">
           <Media lessThan="md">
             <svg
               className="absolute inset-0 -rotate-90"

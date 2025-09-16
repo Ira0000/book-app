@@ -1,10 +1,5 @@
 "use client";
 
-import {
-  calculateTimeLeftToRead,
-  formatTimeLeft,
-  formatTimeReadInMinutes,
-} from "@/lib/dateFormat";
 import { useBookStore } from "@/store/bookStore";
 import Image from "next/image";
 
@@ -13,33 +8,23 @@ export default function ReadingPage() {
 
   const isReading = selectedBook && isCurrentlyReading(selectedBook._id);
 
-  const pagesRead: number =
-    selectedBook?.progress.reduce(
-      (total, session) => total + (session.finishPage - session.startPage),
-      0
-    ) || 0;
-  const timeRead: number =
-    selectedBook?.progress.reduce(
-      (total, session) =>
-        total +
-        formatTimeReadInMinutes(session.startReading, session.finishReading),
-      0
-    ) || 0;
-
-  const timeLeftInMinutes = selectedBook
-    ? calculateTimeLeftToRead(selectedBook.totalPages, pagesRead, timeRead)
-    : null;
+  const timeLeftToRead =
+    selectedBook?.timeLeftToRead &&
+    selectedBook.timeLeftToRead.hours === 0 &&
+    selectedBook.timeLeftToRead.minutes === 0
+      ? "Book read"
+      : selectedBook?.timeLeftToRead
+      ? `${selectedBook.timeLeftToRead.hours} hours and ${selectedBook.timeLeftToRead.minutes} minutes left`
+      : "Start reading to see progress";
 
   return (
-    <div className="flex flex-col  gap-5 py-[20px]">
+    <div className="flex flex-col  gap-5 py-[20px] md:gap-8 lg:gap-11">
       <div className="flex justify-between">
         <h2 className="text-xl mb-5 md:mb-3 md:text-xxl text-milk-white">
           My reading
         </h2>
         <p className="hiiden md:block text-larg text-grey-form font-medium">
-          {timeLeftInMinutes !== null
-            ? formatTimeLeft(timeLeftInMinutes)
-            : "Start reading to see progress"}
+          {timeLeftToRead}
         </p>
       </div>
       {selectedBook && (
@@ -50,10 +35,10 @@ export default function ReadingPage() {
               width={137}
               alt={`Cover of the book ${selectedBook.title} by ${selectedBook.author}`}
               src={selectedBook?.imageUrl}
-              className="h-auto rounded-[8px] object-cover mb-[5px] md:mb-5 md:w-[169px]"
+              className="h-auto rounded-[8px] object-cover mb-[5px] md:mb-5 md:w-[169px] md:h-[256px] lg:w-[224px] lg:h-[340px]"
             />
           ) : (
-            <div className="py-[114px] px-[25px] mb-[5px] bg-grey text-milk-white flex  text-xl items-center justify-center rounded-[8px] object-cover md:mb-5">
+            <div className="py-[114px] px-[25px] mb-[5px] bg-grey md:w-[169px] md:h-[256px] text-milk-white flex  text-xl items-center lg:w-[224px] lg:h-[340px] justify-center rounded-[8px] object-cover md:mb-5">
               <Image
                 className=""
                 height={112}

@@ -21,7 +21,7 @@ export default function RecommendedLink({
       <div className="mt-[5px] flex justify-between items-center">
         <Link
           href={"/recommended"}
-          className="text-large font-medium text-grey-form underline"
+          className="text-large font-medium text-grey-form underline hover:text-milk-white transition-colors"
         >
           Home
         </Link>

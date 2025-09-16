@@ -93,6 +93,9 @@ export default function Dashboard() {
     } catch (error) {
       toast.error(`Failed to finish reading: ${error}`);
     }
+    if (selectedBook.totalPages === page) {
+      openModal("bookFinished");
+    }
   };
 
   const isHomePageActive = pathname === "/recommended";
@@ -119,11 +122,11 @@ export default function Dashboard() {
         </div>
       )}
       {isLibraryPageActive && (
-        <div className="flex flex-col md:flex-row gap-[20px] md:gap-8 w-full">
-          <div className="md:w-[50%]">
+        <div className="flex flex-col md:flex-row gap-[20px] md:gap-8 w-full lg:flex-col lg:size-full lg:justify-between">
+          <div className="md:w-[50%] lg:w-full ">
             <AddBook onSubmit={onAddBookSubmit} />
           </div>
-          <div className="md:w-[50%]">
+          <div className="md:w-[50%] lg:w-full ">
             <RecommendedLink
               recommendedBooks={recommendedBooks}
               isLoading={loading.recommendations}
@@ -132,15 +135,15 @@ export default function Dashboard() {
         </div>
       )}
       {isReadingPageActive && selectedBook && (
-        <div className="flex flex-col md:flex-row gap-[20px] md:gap-10 w-full">
-          <div className="md:w-[50%]">
+        <div className="flex flex-col md:flex-row gap-[20px] md:gap-10 w-full lg:flex-col lg:justify-between ">
+          <div className="md:w-[50%] lg:w-full ">
             <ReadingStartForm
               onSubmit={isReading ? onStopReadingSubmit : onStartReadingSubmit}
               buttonText={isReading ? "To Stop" : "To Start"}
               totalPages={selectedBook?.totalPages}
             />
           </div>
-          <div className="md:w-[50%]">
+          <div className="md:w-[50%] lg:w-full ">
             <Details bookDetails={selectedBook} />
           </div>
         </div>

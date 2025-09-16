@@ -83,7 +83,8 @@ export default function EmblaCarousel({
     return grouped;
   }
 
-  const groupedSlides = groupSlides(slides);
+  const groupedSlidesTablet = groupSlides(slides);
+  const groupedSlidesDesktop = groupSlides(slides, 2, 5);
 
   const handleOnCoverClick = (slide: Book | UserBookResponse) => {
     if (isLibraryPage) {
@@ -156,12 +157,12 @@ export default function EmblaCarousel({
             </div>
           </Media>
 
-          {/* Carousel tablet and desktop */}
+          {/* Carousel tablet */}
 
-          <Media greaterThanOrEqual="md">
+          <Media between={["md", "lg"]}>
             <div className="overflow-hidden w-full" ref={emblaRef}>
               <ul className="flex w-full gap-[25px] lg:gap-[20px]">
-                {groupedSlides.map((slideGroup, groupIndex) => (
+                {groupedSlidesTablet.map((slideGroup, groupIndex) => (
                   <li
                     key={groupIndex}
                     className={`flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)] ${carouselStyle}`}
@@ -172,7 +173,48 @@ export default function EmblaCarousel({
                           groupIndex * 2 + slideIndexInGroup;
 
                         return (
-                          <li key={`tablet-${slide._id}`}>
+                          <li
+                            key={`tablet-${slide._id}`}
+                            className="cursor-pointer"
+                          >
+                            <BookCard
+                              index={actualSlideIndex}
+                              imagePriority={8}
+                              slide={slide as Book}
+                              isLibraryPage={isLibraryPage}
+                              handleDeleteBook={handleDeleteBook}
+                              handleOnCoverClick={handleOnCoverClick}
+                            />
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Media>
+
+          {/* Carousel desktop */}
+
+          <Media greaterThanOrEqual="lg">
+            <div className="overflow-hidden w-full" ref={emblaRef}>
+              <ul className="flex w-full gap-[25px] lg:gap-[20px]">
+                {groupedSlidesDesktop.map((slideGroup, groupIndex) => (
+                  <li
+                    key={groupIndex}
+                    className={`flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)] ${carouselStyle}`}
+                  >
+                    <ul className="flex flex-col gap-[27px]">
+                      {slideGroup.map((slide, slideIndexInGroup) => {
+                        const actualSlideIndex =
+                          groupIndex * 2 + slideIndexInGroup;
+
+                        return (
+                          <li
+                            key={`tablet-${slide._id}`}
+                            className="cursor-pointer"
+                          >
                             <BookCard
                               index={actualSlideIndex}
                               imagePriority={10}

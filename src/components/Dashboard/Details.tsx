@@ -10,6 +10,7 @@ import { cn } from "@/lib/cn";
 import Diary from "./Diary";
 import Statistics from "./Statistics";
 import { useBookStore } from "@/store/bookStore";
+import { toast } from "react-toastify";
 
 type DetailsPropsType = {
   bookDetails: UserBookResponse;
@@ -35,7 +36,12 @@ export default function Details({ bookDetails }: DetailsPropsType) {
       readingId: readingId,
       bookId: bookId,
     };
-    await deleteReadingSession(requestData);
+    try {
+      await deleteReadingSession(requestData);
+      toast.success("Reading info deleted!");
+    } catch (error) {
+      toast.error(`Something went wrong: ${error}`);
+    }
   };
 
   if (
@@ -99,7 +105,14 @@ export default function Details({ bookDetails }: DetailsPropsType) {
           onDeleteSessionClick={onDeleteSessionClick}
         />
       ) : (
-        <Statistics bookDetails={bookDetails} />
+        <>
+          <div className="text-large font-medium hidden lg:block text-grey-form">
+            Each page, each chapter is a new round of knowledge, a new step
+            towards understanding. By rewriting statistics, we create our own
+            reading history.
+          </div>
+          <Statistics bookDetails={bookDetails} />
+        </>
       )}
     </div>
   );

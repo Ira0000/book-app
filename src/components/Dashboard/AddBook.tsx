@@ -27,7 +27,7 @@ export default function AddBook({ onSubmit }: AddBookPropsType) {
   return (
     <form
       noValidate
-      className="bg-transparent flex flex-col gap-5"
+      className="bg-transparent flex flex-col gap-2 md:gap-5"
       onSubmit={handleSubmit(onSubmit)}
     >
       <h2 className="text-light md:text-large md:font-medium text-milk-white">

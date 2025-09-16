@@ -11,6 +11,7 @@ import AddedToLibraryModal from "./AddedToLibraryModal";
 import ErrorModal from "./ErrorModal";
 import { UserBookResponse, Book } from "@/types/BookTypes";
 import StartReadingModal from "./StartReadingModal";
+import BookReadModal from "./BookReadModal";
 
 const modals = [
   {
@@ -43,6 +44,13 @@ const modals = [
     name: "startReading",
     className:
       "w-[335px] mx-[20px]  md:w-[500px]  bg-grey-dark rounded-xl border border-[#68686833]",
+    backdrop:
+      "fixed inset-0 z-50 flex justify-center items-center bg-black/50  ",
+  },
+  {
+    name: "bookFinished",
+    className:
+      "w-[335px] mx-[20px]  md:w-[342px]  bg-grey-dark rounded-xl border border-[#68686833]",
     backdrop:
       "fixed inset-0 z-50 flex justify-center items-center bg-black/50  ",
   },
@@ -128,6 +136,7 @@ export default function ModalManager() {
                     />
                   )}
                   {modal.name === "addedToLibrary" && <AddedToLibraryModal />}
+                  {modal.name === "bookFinished" && <BookReadModal />}
                   {modal.name === "error" && (
                     <ErrorModal
                       error={modalData.error as { message?: string }}
@@ -158,6 +167,7 @@ export default function ModalManager() {
                   className={modal.className}
                 >
                   {modal.name === "burger" && <BurgerModal />}
+                  {modal.name === "bookFinished" && <BookReadModal />}
                   {modal.name === "addToLibrary" && modalData.addToLibrary && (
                     <AddToLibraryModal book={modalData.addToLibrary as Book} />
                   )}
