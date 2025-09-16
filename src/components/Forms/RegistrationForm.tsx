@@ -43,10 +43,10 @@ export default function RegistrationForm() {
   return (
     <form
       noValidate
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-5 md:gap-[146px] md:max-w-[475px]"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 md:gap-[14px]">
         <FormInput
           validationVisible={true}
           control={control}
@@ -73,16 +73,16 @@ export default function RegistrationForm() {
           toggleShowPassword={() => setShowPassword(!showPassword)}
         />
       </div>
-      <div className="flex gap-[14px] justify-center">
+      <div className="flex gap-[14px] md:gap-[20px] justify-center md:justify-start">
         <button
           type="submit"
-          className="bg-milk-white rounded-[30px] w-[140px] text-center py-3 text-grey-dark"
+          className="bg-milk-white rounded-[30px] w-[140px] text-center py-3 text-grey-dark md:text-xl md:w-[166px] md:py-4"
         >
           Registration
         </button>
         <Link
           href={"/login"}
-          className="flex items-center text-small leading-[14px] -tracking-[2%] text-grey-form underline"
+          className="flex items-center text-small leading-[14px] -tracking-[2%] text-grey-form underline md:text-large md:font-medium"
         >
           Already have an account?
         </Link>

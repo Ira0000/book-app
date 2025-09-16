@@ -42,16 +42,17 @@ export default function LoginForm() {
   return (
     <form
       noValidate
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-5 md:gap-[146px] md:max-w-[475px]"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 md:gap-[14px]">
         <FormInput
           className="pr-[32px]"
           control={control}
           name="email"
           label="email"
           required
+          validationVisible={true}
         />
         <FormInput
           type={showPassword ? "text" : "password"}
@@ -60,21 +61,22 @@ export default function LoginForm() {
           name="password"
           label="password"
           required
+          validationVisible={true}
           isPasswordField={true}
           isPasswordShown={showPassword}
           toggleShowPassword={() => setShowPassword(!showPassword)}
         />
       </div>
-      <div className="flex gap-[14px] justify-center">
+      <div className="flex gap-[14px] md:gap-[20px] justify-center md:justify-start">
         <button
           type="submit"
-          className="bg-milk-white rounded-[30px] w-[140px] text-center py-3 text-grey-dark"
+          className="bg-milk-white rounded-[30px] w-[140px] md:w-[166px] md:py-4 text-center md:text-xl py-3 text-grey-dark"
         >
           Log in
         </button>
         <Link
           href={"/register"}
-          className="flex items-center text-small leading-[14px] -tracking-[2%] text-grey-form underline"
+          className="flex items-center text-small md:text-large md:font-medium leading-[14px] -tracking-[2%] text-grey-form underline"
         >
           Don&apos;t have an account?
         </Link>
