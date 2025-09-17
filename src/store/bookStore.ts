@@ -49,7 +49,7 @@ const initialErrorState: ErrorStates = {
   reading: null,
 };
 
-const IS_TESTING = true;
+const IS_TESTING = false;
 
 const conditionalLog = (message: string, isError = false) => {
   if (IS_TESTING) {

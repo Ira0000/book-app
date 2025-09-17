@@ -9,7 +9,7 @@ import {
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-const IS_TESTING = true;
+const IS_TESTING = false;
 
 const conditionalLog = (message: string, isError = false) => {
   if (IS_TESTING) {
