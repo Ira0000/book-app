@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/components/Providers/AuthProvider";
 import { ModalProvider } from "@/components/Providers/ModalProvider";
 import ModalManager from "@/components/Modals/ModalsManager";
 import { ToastContainer } from "react-toastify";
+import { AuthGuard } from "@/components/Providers/AuthGuard";
 
 export const metadata: Metadata = {
   title: "Book App",
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
+        <AuthGuard>
           <ModalProvider>
             <ToastContainer
               position="top-right"
@@ -36,7 +36,7 @@ export default function RootLayout({
             {children}
             <ModalManager />
           </ModalProvider>
-        </AuthProvider>
+        </AuthGuard>
       </body>
     </html>
   );

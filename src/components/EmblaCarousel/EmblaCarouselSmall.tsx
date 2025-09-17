@@ -29,6 +29,7 @@ export default function EmblaCarouselSmall({
 
   const handleOnCoverClick = (slide: Book) => {
     openModal("addToLibrary", slide as Book);
+    console.log(slides);
   };
 
   if (isLoading) {
@@ -39,7 +40,7 @@ export default function EmblaCarouselSmall({
       <ul className="flex w-full gap-[21px]">
         {slides.map((slide, index) => (
           <li
-            key={`mobile-${slide._id}`}
+            key={`small-${slide._id}`}
             className="flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-42px)/3)]"
           >
             <BookCard

@@ -1,16 +1,16 @@
 "use client";
 
 import { useModal } from "@/components/Providers/ModalProvider";
-import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/cn";
 import Icon from "@/components/Ui/Icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
+import { useAuthStore } from "@/store/authStore";
 
 export default function BurgerModal() {
   const { closeModal } = useModal();
-  const { signOut } = useAuth();
+  const { signOut } = useAuthStore();
   const pathname = usePathname();
 
   const handleLogout = () => {

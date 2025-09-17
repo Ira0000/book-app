@@ -18,7 +18,7 @@ const conditionalLog = (message: string, isError = false) => {
   }
 };
 
-// Helper to set authentication cookie
+// Helper to set authentication cookie for middleware
 const setAuthCookie = (isAuthenticated: boolean) => {
   if (typeof document !== "undefined") {
     document.cookie = `isAuthenticated=${isAuthenticated}; path=/; max-age=${
@@ -27,7 +27,12 @@ const setAuthCookie = (isAuthenticated: boolean) => {
   }
 };
 
-export const useAuthStore = create<AuthState>()(
+interface ExtendedAuthState extends AuthState {
+  isInitialized: boolean;
+  initializationError: string | null;
+}
+
+export const useAuthStore = create<ExtendedAuthState>()(
   persist(
     (set, get) => {
       const internalRefreshAccessToken = async (): Promise<{
@@ -102,6 +107,17 @@ export const useAuthStore = create<AuthState>()(
           tokenManager.setToken(null);
           tokenManager.setRefreshToken(null);
           setAuthCookie(false);
+
+          // Redirect to login
+          if (typeof window !== "undefined") {
+            const currentPath = window.location.pathname;
+            const isGuestRoute = ["/login", "/register"].includes(currentPath);
+
+            if (!isGuestRoute) {
+              window.location.href = `/login?redirect=${currentPath}`;
+            }
+          }
+
           conditionalLog("✅ Sign out complete, all auth data cleared");
         }
       };
@@ -115,35 +131,54 @@ export const useAuthStore = create<AuthState>()(
         refreshToken: null,
         isAuthenticated: false,
         isLoading: false,
+        isInitialized: false,
         error: null,
+        initializationError: null,
         user: null,
 
         initializeAuth: async () => {
           conditionalLog("🚀 Initializing auth...");
           const state = get();
 
-          if (!state.refreshToken) {
-            conditionalLog(
-              "⚠️ No refresh token found, user is unauthenticated"
-            );
-            set({ token: null, isAuthenticated: false, user: null });
-            tokenManager.setToken(null);
-            tokenManager.setRefreshToken(null);
-            setAuthCookie(false);
+          // Skip if already initialized
+          if (state.isInitialized) {
             return;
           }
 
-          // Update token manager with current tokens
-          tokenManager.setToken(state.token);
-          tokenManager.setRefreshToken(state.refreshToken);
+          set({ isLoading: true });
 
           try {
+            if (!state.refreshToken) {
+              conditionalLog(
+                "⚠️ No refresh token found, user is unauthenticated"
+              );
+              set({
+                token: null,
+                isAuthenticated: false,
+                user: null,
+                isInitialized: true,
+                isLoading: false,
+                initializationError: null,
+              });
+              tokenManager.setToken(null);
+              tokenManager.setRefreshToken(null);
+              setAuthCookie(false);
+              return;
+            }
+
+            // Update token manager with current tokens
+            tokenManager.setToken(state.token);
+            tokenManager.setRefreshToken(state.refreshToken);
+
             await internalRefreshAccessToken();
+            set({
+              isInitialized: true,
+              isLoading: false,
+              initializationError: null,
+            });
             conditionalLog("✅ Auth initialized successfully");
-          } catch (error) {
-            conditionalLog(
-              `⚠️ Auth initialization failed, clearing stored tokens, ${error}`
-            );
+          } catch (error: any) {
+            conditionalLog(`⚠️ Auth initialization failed: ${error.message}`);
 
             // Clear persisted storage completely
             if (typeof window !== "undefined") {
@@ -157,7 +192,11 @@ export const useAuthStore = create<AuthState>()(
               isAuthenticated: false,
               user: null,
               error: null,
+              isInitialized: true,
+              isLoading: false,
+              initializationError: error.message,
             });
+
             tokenManager.setToken(null);
             tokenManager.setRefreshToken(null);
             setAuthCookie(false);
@@ -185,10 +224,19 @@ export const useAuthStore = create<AuthState>()(
               isLoading: false,
               user: userData,
               error: null,
+              isInitialized: true,
             });
 
             setAuthCookie(true);
             conditionalLog("✅ Login successful, tokens and user data set");
+
+            // Handle redirect after successful login
+            if (typeof window !== "undefined") {
+              const urlParams = new URLSearchParams(window.location.search);
+              const redirectPath = urlParams.get("redirect") || "/recommended";
+              window.location.href = redirectPath;
+            }
+
             return response;
           } catch (err: any) {
             const errorMessage =
@@ -232,12 +280,21 @@ export const useAuthStore = create<AuthState>()(
               isLoading: false,
               user: userData,
               error: null,
+              isInitialized: true,
             });
 
             setAuthCookie(true);
             conditionalLog(
               "✅ Registration successful, tokens and user data set"
             );
+
+            // Handle redirect after successful registration
+            if (typeof window !== "undefined") {
+              const urlParams = new URLSearchParams(window.location.search);
+              const redirectPath = urlParams.get("redirect") || "/recommended";
+              window.location.href = redirectPath;
+            }
+
             return response;
           } catch (err: any) {
             const errorMessage =
@@ -263,7 +320,6 @@ export const useAuthStore = create<AuthState>()(
         },
 
         refreshAccessToken: internalRefreshAccessToken,
-
         signOut: internalSignOut,
       };
     },

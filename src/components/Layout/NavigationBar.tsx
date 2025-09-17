@@ -5,19 +5,18 @@ import React from "react";
 import { useModal } from "../Providers/ModalProvider";
 import Link from "next/link";
 import { Media, MediaContextProvider } from "@/helpers/Media";
-import { useAuth } from "@/hooks/useAuth";
 import { usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import { cn } from "@/lib/cn";
+import { useAuthStore } from "@/store/authStore";
 
 export default function NavigationBar() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuthStore();
 
   const userName = user && user.name.toString();
   const userInitials = user && user.name.slice(0, 1);
 
   const { openModal, isModalOpen, closeModal } = useModal();
-  const { signOut } = useAuth();
   const pathname = usePathname();
 
   const handleLogout = () => {
