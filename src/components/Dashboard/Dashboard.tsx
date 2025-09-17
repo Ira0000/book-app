@@ -12,6 +12,7 @@ import { useModal } from "../Providers/ModalProvider";
 import Details from "./Details";
 import ReadingStartForm from "../Forms/ReadingStartForm";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 export default function Dashboard() {
   const {
@@ -27,6 +28,18 @@ export default function Dashboard() {
   const pathname = usePathname();
 
   const { openModal } = useModal();
+
+  useEffect(() => {
+    if (recommendedBooks.length === 0) {
+      const initialRequest: BookRecommendationRequest = {
+        page: 1,
+        limit: 10,
+        title: "",
+        author: "",
+      };
+      fetchRecommendedBooks(initialRequest);
+    }
+  }, [fetchRecommendedBooks, recommendedBooks.length]);
 
   const isReading = selectedBook && isCurrentlyReading(selectedBook._id);
 

@@ -7,9 +7,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "@/components/Ui/FormInput";
 import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useAuthStore } from "@/store/authStore";
 
 export default function RegistrationForm() {
   const { control, handleSubmit } = useForm<RegisterFormData>({
@@ -23,8 +22,7 @@ export default function RegistrationForm() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const { signUp } = useAuth();
-  const router = useRouter();
+  const { signUp, isLoading } = useAuthStore();
 
   const onSubmit = async (data: RegisterFormData) => {
     const requestData: RegisterFormData = {
@@ -33,15 +31,9 @@ export default function RegistrationForm() {
       password: data.password,
     };
 
-    if (!signUp) {
-      toast.error("Authentication store is not ready yet.");
-      return;
-    }
-
     try {
       await signUp(requestData);
       toast.success("Registration successful!");
-      router.push("/");
     } catch (err: any) {
       toast.error("Registration failed:", err.message);
     }
@@ -85,7 +77,7 @@ export default function RegistrationForm() {
           type="submit"
           className="bg-milk-white text-large  rounded-[30px] w-[140px] md:w-[166px] md:py-4 text-center md:text-xl py-3 text-grey-dark hover:bg-transparent border border-milk-white hover:border-milk-white/20 cursor-pointer hover:text-milk-white"
         >
-          Registration
+          {isLoading ? "Signing up..." : "Registration"}
         </button>
         <Link
           href={"/login"}

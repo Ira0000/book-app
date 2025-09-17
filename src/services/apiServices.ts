@@ -10,7 +10,7 @@ import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from "axios";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://readjourney.b.goit.study/api";
-const IS_TESTING = true;
+const IS_TESTING = false;
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -180,7 +180,9 @@ export const authService = {
     try {
       await apiClient.post("/users/signout");
     } catch (error) {
-      console.error("Sign out request failed:", error);
+      if (IS_TESTING) {
+        console.error("Sign out request failed:", error);
+      }
     }
   },
 

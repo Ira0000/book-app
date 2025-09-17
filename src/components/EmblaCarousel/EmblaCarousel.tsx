@@ -163,7 +163,7 @@ export default function EmblaCarousel({
               <ul className="flex w-full gap-[25px] lg:gap-[20px]">
                 {groupedSlidesTablet.map((slideGroup, groupIndex) => (
                   <li
-                    key={groupIndex}
+                    key={`tablet-${groupIndex}`}
                     className={`flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)] ${carouselStyle}`}
                   >
                     <ul className="flex flex-col gap-[27px]">
@@ -201,7 +201,7 @@ export default function EmblaCarousel({
               <ul className="flex w-full gap-[25px] lg:gap-[20px]">
                 {groupedSlidesDesktop.map((slideGroup, groupIndex) => (
                   <li
-                    key={groupIndex}
+                    key={`dsktop-${groupIndex}`}
                     className={`flex-none min-w-0 shrink-0 grow-0 w-[calc((100%-75px)/4)] lg:w-[calc((100%-80px)/5)] ${carouselStyle}`}
                   >
                     <ul className="flex flex-col gap-[27px]">
@@ -211,7 +211,7 @@ export default function EmblaCarousel({
 
                         return (
                           <li
-                            key={`tablet-${slide._id}`}
+                            key={`desktop-${slide._id}`}
                             className="cursor-pointer"
                           >
                             <BookCard

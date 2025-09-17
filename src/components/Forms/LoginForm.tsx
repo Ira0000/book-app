@@ -7,9 +7,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInput from "@/components/Ui/FormInput";
 import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useAuthStore } from "@/store/authStore";
 
 export default function LoginForm() {
   const { control, handleSubmit } = useForm<LoginFormData>({
@@ -21,23 +20,16 @@ export default function LoginForm() {
     mode: "onChange",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn } = useAuth();
-  const router = useRouter();
+  const { signIn, isLoading } = useAuthStore();
 
   const onSubmit = async (data: LoginFormData) => {
     const requestData: LoginFormData = {
       email: data.email.toLowerCase(),
       password: data.password,
     };
-    if (!signIn) {
-      toast.error("Authentication store is not ready yet.");
-      return;
-    }
-
     try {
       await signIn(requestData);
       toast.success("Login successful!");
-      router.push("/");
     } catch (err: any) {
       toast.error(`Login failed: ${err.message}`);
     }
@@ -76,7 +68,7 @@ export default function LoginForm() {
           type="submit"
           className="bg-milk-white text-large  rounded-[30px] w-[140px] md:w-[166px] md:py-4 text-center md:text-xl py-3 text-grey-dark hover:bg-transparent border border-milk-white hover:border-milk-white/20 cursor-pointer hover:text-milk-white"
         >
-          Log in
+          {isLoading ? "Signing in..." : "Log in"}
         </button>
         <Link
           href={"/register"}

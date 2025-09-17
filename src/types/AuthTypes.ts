@@ -34,7 +34,9 @@ export interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isInitialized: boolean;
   error: string | null;
+  initializationError: string | null;
   user: User | null;
   initializeAuth: () => Promise<void>;
   signIn: (data: SignInRequest) => Promise<AuthResponse>;

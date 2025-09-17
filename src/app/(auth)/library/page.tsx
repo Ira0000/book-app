@@ -35,6 +35,7 @@ export default function LibraryPage() {
 
   const isLibraryLoading = loading.userLibrary;
   const libraryError = errors.userLibrary;
+  // const isButtonsVisible: boolean = userLibrary && userLibrary.length > 7;
 
   return (
     <div className="relative pt-[20px] pb-[40px]">
@@ -48,6 +49,7 @@ export default function LibraryPage() {
       </div>
       {userLibrary.length > 0 ? (
         <EmblaCarousel
+          // isButtonsVisible={isButtonsVisible}
           error={libraryError}
           isLoading={isLibraryLoading}
           slides={userLibrary}
