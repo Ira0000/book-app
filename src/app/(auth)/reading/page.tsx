@@ -7,8 +7,6 @@ export default function ReadingPage() {
   const { selectedBook, isCurrentlyReading } = useBookStore();
 
   const isReading = selectedBook && isCurrentlyReading(selectedBook._id);
-  console.log(selectedBook);
-
   const timeLeftToRead = (() => {
     const time = selectedBook?.timeLeftToRead;
     const status = selectedBook?.status;

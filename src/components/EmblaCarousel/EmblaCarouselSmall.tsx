@@ -29,7 +29,6 @@ export default function EmblaCarouselSmall({
 
   const handleOnCoverClick = (slide: Book) => {
     openModal("addToLibrary", slide as Book);
-    console.log(slides);
   };
 
   if (isLoading) {
