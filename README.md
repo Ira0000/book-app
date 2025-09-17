@@ -107,4 +107,4 @@ To run this project locally, follow these steps:
 4.  **View the live application:**
     The application is deployed on Vercel and can be accessed here:
 
-    [https://weather-app-two-dun-70.vercel.app/](https://weather-app-two-dun-70.vercel.app/)
+    [https://book-app-rho-two.vercel.app/login](https://book-app-rho-two.vercel.app/login)
